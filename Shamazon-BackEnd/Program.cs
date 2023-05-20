@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using Shamazon;
 using Shamazon.Repositories;
 
@@ -11,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddStripeInfrastructure(builder.Configuration);
+FirebaseApp.Create();
 
 var app = builder.Build();
 
@@ -22,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.UseAuthorization();
 
