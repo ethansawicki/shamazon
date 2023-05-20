@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shamazon.Models;
 using Shamazon.Repositories;
+using System.Net;
 
 namespace Shamazon.Controllers
 {
@@ -15,7 +16,7 @@ namespace Shamazon.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("findUser/{id}")]
+        [HttpGet]
         public IActionResult GetUserByFirebaseId(string firebaseId) 
         {
             var user = _userRepository.GetUserByFirebaseId(firebaseId);
