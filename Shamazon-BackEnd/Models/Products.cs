@@ -14,4 +14,11 @@
 
         public string ProductImg { get; set; }
     }
+
+    public class ProductsCategory
+    {
+        public int ProductCategoryId { get; set; }
+
+        public string ProductCategoryName { get; set; }
+    }
 }
