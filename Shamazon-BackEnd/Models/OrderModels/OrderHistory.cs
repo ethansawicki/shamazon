@@ -1,4 +1,4 @@
-﻿namespace Shamazon.Models
+﻿namespace Shamazon.Models.OrderControllers
 {
     public class OrderHistory
     {

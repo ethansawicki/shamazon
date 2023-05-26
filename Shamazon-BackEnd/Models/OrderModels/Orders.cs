@@ -1,4 +1,4 @@
-﻿namespace Shamazon.Models
+﻿namespace Shamazon.Models.OrderControllers
 {
     public class Orders
     {
@@ -19,7 +19,7 @@
         public int UserId { get; set; }
         public decimal OrderTotal { get; set; }
         public string OrderAddress { get; set; }
-        public DateTime OrderDate { get; set;}
+        public DateTime OrderDate { get; set; }
     }
 
     public class GetOrders

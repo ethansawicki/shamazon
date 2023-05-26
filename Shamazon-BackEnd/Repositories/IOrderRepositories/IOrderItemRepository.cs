@@ -1,6 +1,6 @@
-﻿using Shamazon.Models;
+﻿using Shamazon.Models.OrderControllers;
 
-namespace Shamazon.Repositories
+namespace Shamazon.Repositories.OrderRepositories
 {
     public interface IOrderItemRepository
     {

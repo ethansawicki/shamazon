@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shamazon;
 using Shamazon.Repositories;
+using Shamazon.Repositories.OrderRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
