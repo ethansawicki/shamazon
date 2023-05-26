@@ -1,5 +1,6 @@
 ﻿using Shamazon.DBUtils;
 using Shamazon.Models;
+using System.Security.Policy;
 
 namespace Shamazon.Repositories
 {
@@ -7,7 +8,23 @@ namespace Shamazon.Repositories
     {
         public OrderItemRepository(IConfiguration configuration) : base(configuration) { }
 
-        public List<OrderItem> GetOrderItemsById(int userId)
+        public void AddNewOrder(AddOrderItem addOrderItem)
+        {
+            using (var cmd = Connection.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    INSERT INTO OrderItem (ProductQuantity, ProductId)
+                    OUTPUT INSERTED.ID
+                    VALUES (@ProductQuantity, @ProductId)";
+
+                DbUtils.AddParameter(cmd, "@ProductQuantity", addOrderItem.ProductQuantity);
+                DbUtils.AddParameter(cmd, "@ProductId", addOrderItem.ProductId);
+
+                addOrderItem.OrderItemId = (int)cmd.ExecuteScalar();
+            }
+        }
+
+        public List<GetOrderItem> GetOrders()
         {
             using (var conn = Connection)
             {
@@ -15,52 +32,25 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT
-                            OrderItem.id, OrderItem.OrderId, OrderItem.ProductId, OrderItem.ProductQuantity,
-                            Products.id as ProductId, Products.productName, Products.productPrice, Products.productDescription,
-                            Products.productImg
-                        FROM OrderItem as OrderItem
-                        JOIN Orders as Orders ON Orders.id = OrderItem.OrderId
-                        JOIN Products as Products ON Products.id = OrderItem.ProductId
-                        WHERE Orders.userId = @userId";
-
-                    DbUtils.AddParameter(cmd, "@userId", userId);
-
+                        SELECT 
+                            id, OrderId, ProductId, ProductQuantity
+                        FROM OrderItem";
                     var reader = cmd.ExecuteReader();
 
-                    var orderItems = new List<OrderItem>();
-
+                    var orderItem = new List<GetOrderItem>();
                     while (reader.Read())
                     {
-                        var orderId = DbUtils.GetInt(reader, "id");
-                        var existingOrders = orderItems.FirstOrDefault(x => x.OrderItemId == orderId);
-
-                        if (existingOrders == null)
+                        orderItem.Add(new GetOrderItem()
                         {
-                            existingOrders = new OrderItem()
-                            {
-                                OrderItemId = DbUtils.GetInt(reader, "id"),
-                                OrderId = DbUtils.GetInt(reader, "OrderId"),
-                                ProductQuanity = DbUtils.GetInt(reader, "ProductQuantity"),
-                                Products = new List<Products>()
-                            };
-                        }
-
-                        orderItems.Add(existingOrders);
-
-                        existingOrders.Products.Add(new Products()
-                        {
-                            Id = DbUtils.GetInt(reader, "ProductId"),
-                            ProductName = DbUtils.GetString(reader, "productName"),
-                            ProductImg = DbUtils.GetString(reader, "productImg"),
-                            ProductDescription = DbUtils.GetString(reader, "productDescription"),
-                            ProductPrice = DbUtils.GetDecimal(reader, "productPrice")
+                            OrderItemId = DbUtils.GetInt(reader, "id"),
+                            OrderId = DbUtils.GetInt(reader, "OrderId"),
+                            ProductId = DbUtils.GetInt(reader, "ProductId"),
+                            ProductQuantity = DbUtils.GetInt(reader, "ProductQuantity")
                         });
                     }
-
                     reader.Close();
 
-                    return orderItems;
+                    return orderItem;
                 }
             }
         }
