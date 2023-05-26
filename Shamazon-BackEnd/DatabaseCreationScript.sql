@@ -43,7 +43,8 @@ GO
 CREATE TABLE [OrderItem](
 	[id] int PRIMARY KEY IDENTITY,
 	[OrderId] int NOT NULL,
-	[ProductId] int NOT NULL
+	[ProductId] int NOT NULL,
+	[ProductQuantity] int NOT NULL
 )
 GO
 
@@ -83,7 +84,7 @@ INSERT INTO dbo.[productCategory]([categoryName]) VALUES ('PC Components')
 
 INSERT INTO dbo.[Orders]([userId],[orderTotal],[orderAddress],[dateCreated]) VALUES (1,1999.98,'1234 BS BLVD','2023-05-18')
 
-INSERT INTO dbo.[OrderItem]([OrderId],[ProductId]) VALUES (1,2) 
+INSERT INTO dbo.[OrderItem]([OrderId],[ProductId],[ProductQuantity]) VALUES (1,2,1) 
 
 INSERT INTO dbo.[products]([productCategoryId],[productName],[productPrice],[productQuantity],[productDescription],[productImg]) VALUES (1,'NVIDIA RTX 4090', 1599.99, 3, 'This is a graphics card', 'https://www.shopmyexchange.com/products/images/xlarge/3441153_1007_alt3.jpg')
 
