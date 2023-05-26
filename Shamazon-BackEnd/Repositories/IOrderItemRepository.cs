@@ -4,7 +4,7 @@ namespace Shamazon.Repositories
 {
     public interface IOrderItemRepository
     {
-        void AddNewOrder(AddOrderItem addOrderItem);
-        List<GetOrderItem> GetOrders();
+        void AddNewOrderItem(AddOrderItem addOrderItem);
+        List<GetOrderItem> GetOrderItem();
     }
 }

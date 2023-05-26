@@ -40,6 +40,7 @@ var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddTransient<IOrderHistoryRepository, OrderHistoryRepository>();
+builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
 builder.Services.AddStripeInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

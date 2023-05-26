@@ -19,14 +19,14 @@ namespace Shamazon.Controllers
         [HttpPost]
         public IActionResult AddNewOrderItem(AddOrderItem addOrderItem)
         {
-            _orderItemRepository.AddNewOrder(addOrderItem);
+            _orderItemRepository.AddNewOrderItem(addOrderItem);
             return CreatedAtAction("Get", new { id = addOrderItem.OrderItemId }, addOrderItem);
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_orderItemRepository.GetOrders());
+            return Ok(_orderItemRepository.GetOrderItem());
         }
     }
 }
