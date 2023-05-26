@@ -17,6 +17,17 @@
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public decimal OrderTotal { get; set; }
+        public string OrderAddress { get; set; }
+        public DateTime OrderDate { get; set;}
+    }
 
+    public class GetOrders
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public decimal OrderTotal { get; set; }
+        public string OrderAddress { get; set; }
+        public DateTime OrderDate { get; set; }
     }
 }

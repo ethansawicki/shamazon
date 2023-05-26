@@ -1,6 +1,5 @@
 ﻿using Shamazon.DBUtils;
 using Shamazon.Models;
-using System.Security.Policy;
 
 namespace Shamazon.Repositories
 {
@@ -8,7 +7,7 @@ namespace Shamazon.Repositories
     {
         public OrderItemRepository(IConfiguration configuration) : base(configuration) { }
 
-        public void AddNewOrder(AddOrderItem addOrderItem)
+        public void AddNewOrderItem(AddOrderItem addOrderItem)
         {
             using (var cmd = Connection.CreateCommand())
             {
@@ -24,7 +23,7 @@ namespace Shamazon.Repositories
             }
         }
 
-        public List<GetOrderItem> GetOrders()
+        public List<GetOrderItem> GetOrderItem()
         {
             using (var conn = Connection)
             {
