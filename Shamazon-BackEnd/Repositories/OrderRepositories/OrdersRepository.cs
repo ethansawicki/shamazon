@@ -1,7 +1,7 @@
 ﻿using Shamazon.DBUtils;
-using Shamazon.Models;
+using Shamazon.Models.OrderControllers;
 
-namespace Shamazon.Repositories
+namespace Shamazon.Repositories.OrderRepositories
 {
     public class OrdersRepository : BaseRepository, IOrdersRepository
     {

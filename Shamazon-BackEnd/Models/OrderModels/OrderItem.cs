@@ -1,4 +1,4 @@
-﻿namespace Shamazon.Models
+﻿namespace Shamazon.Models.OrderControllers
 {
     public class OrderItem
     {
@@ -18,7 +18,7 @@
         public int OrderId { get; set; }
 
         public int ProductId { get; set; }
-        public int ProductQuantity { get; set;}
+        public int ProductQuantity { get; set; }
     }
 
     public class AddOrderItem

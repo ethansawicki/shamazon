@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shamazon.Repositories;
+using Shamazon.Repositories.OrderRepositories;
 
 namespace Shamazon.Controllers
 {

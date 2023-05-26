@@ -1,7 +1,8 @@
 ﻿using Shamazon.DBUtils;
 using Shamazon.Models;
+using Shamazon.Models.OrderControllers;
 
-namespace Shamazon.Repositories
+namespace Shamazon.Repositories.OrderRepositories
 {
     public class OrderHistoryRepository : BaseRepository, IOrderHistoryRepository
     {
@@ -39,16 +40,16 @@ namespace Shamazon.Repositories
                         if (orderHistory == null)
                         {
                             orderHistory = new OrderHistory()
-                            {      
+                            {
                                 OrderId = DbUtils.GetInt(reader, "OrderId"),
                                 OrderTotal = DbUtils.GetDecimal(reader, "OrderTotal"),
                                 OrderAddress = DbUtils.GetString(reader, "OrderAddress"),
                                 OrderDate = DbUtils.GetDateTime(reader, "dateCreated"),
-                                OrderItem = new List<OrderItem>()                                   
+                                OrderItem = new List<OrderItem>()
                             };
                             orderItems.Add(orderHistory);
                         }
-                        if(DbUtils.IsNotNull(reader, "OrderItemId"))
+                        if (DbUtils.IsNotNull(reader, "OrderItemId"))
                         {
                             orderHistory.OrderItem.Add(new OrderItem()
                             {
@@ -66,12 +67,12 @@ namespace Shamazon.Repositories
                                         ProductPrice = DbUtils.GetDecimal(reader, "productPrice"),
                                     }
                                 }
-                                
+
                             });
                         }
                     }
-                        reader.Close();
-                        return orderItems;
+                    reader.Close();
+                    return orderItems;
                 }
             }
         }
