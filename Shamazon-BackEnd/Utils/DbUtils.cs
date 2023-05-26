@@ -20,6 +20,11 @@ namespace Shamazon.DBUtils
             return reader.GetInt32(reader.GetOrdinal(column));
         }
 
+        public static decimal GetDecimal(SqlDataReader reader, string column)
+        {
+            return reader.GetDecimal(reader.GetOrdinal(column));
+        }
+
         public static DateTime GetDateTime(SqlDataReader reader, string column)
         {
             return reader.GetDateTime(reader.GetOrdinal(column));

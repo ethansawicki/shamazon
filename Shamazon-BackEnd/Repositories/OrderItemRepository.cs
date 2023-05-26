@@ -3,7 +3,7 @@ using Shamazon.Models;
 
 namespace Shamazon.Repositories
 {
-    public class OrderItemRepository : BaseRepository
+    public class OrderItemRepository : BaseRepository, IOrderItemRepository
     {
         public OrderItemRepository(IConfiguration configuration) : base(configuration) { }
 
@@ -16,7 +16,9 @@ namespace Shamazon.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT
-                            OrderItem.id, OrderItem.OrderId, OrderItem.ProductId, OrderItem.ProductQuantity
+                            OrderItem.id, OrderItem.OrderId, OrderItem.ProductId, OrderItem.ProductQuantity,
+                            Products.id as ProductId, Products.productName, Products.productPrice, Products.productDescription,
+                            Products.productImg
                         FROM OrderItem as OrderItem
                         JOIN Orders as Orders ON Orders.id = OrderItem.OrderId
                         JOIN Products as Products ON Products.id = OrderItem.ProductId
@@ -30,14 +32,30 @@ namespace Shamazon.Repositories
 
                     while (reader.Read())
                     {
-                        orderItems.Add(new OrderItem()
-                        {
-                            OrderItemId = DbUtils.GetInt(reader, "id"),
-                            OrderId = DbUtils.GetInt(reader, "OrderId"),
-                            ProductQuanity = DbUtils.GetInt(reader, "ProductQuantity"),
-                            Products = new List<Products>()
-                        });
+                        var orderId = DbUtils.GetInt(reader, "id");
+                        var existingOrders = orderItems.FirstOrDefault(x => x.OrderItemId == orderId);
 
+                        if (existingOrders == null)
+                        {
+                            existingOrders = new OrderItem()
+                            {
+                                OrderItemId = DbUtils.GetInt(reader, "id"),
+                                OrderId = DbUtils.GetInt(reader, "OrderId"),
+                                ProductQuanity = DbUtils.GetInt(reader, "ProductQuantity"),
+                                Products = new List<Products>()
+                            };
+                        }
+
+                        orderItems.Add(existingOrders);
+
+                        existingOrders.Products.Add(new Products()
+                        {
+                            Id = DbUtils.GetInt(reader, "ProductId"),
+                            ProductName = DbUtils.GetString(reader, "productName"),
+                            ProductImg = DbUtils.GetString(reader, "productImg"),
+                            ProductDescription = DbUtils.GetString(reader, "productDescription"),
+                            ProductPrice = DbUtils.GetDecimal(reader, "productPrice")
+                        });
                     }
 
                     reader.Close();
