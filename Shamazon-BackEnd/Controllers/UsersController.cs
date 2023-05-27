@@ -16,7 +16,7 @@ namespace Shamazon.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("userCheck/{firebaseId}")]
         public IActionResult GetUserByFirebaseId(string firebaseId) 
         {
             var user = _userRepository.GetUserByFirebaseId(firebaseId);
@@ -31,7 +31,28 @@ namespace Shamazon.Controllers
         public IActionResult AddNewUser(Users user)
         {
             _userRepository.AddNewUser(user);
-            return CreatedAtAction("Get", new { id = user.Id }, user);
+            return CreatedAtAction("GetLastUserId", new { id = user.Id }, user);
+        }
+        [HttpDelete]
+        public IActionResult DeleteUser(int id) 
+        {
+            _userRepository.DeleteAccount(id);
+            return NoContent();
+        }
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(Users user, int id)
+        {
+            if(id != user.Id)
+            {
+                return BadRequest();
+            }
+            _userRepository.UpdateUser(user);
+            return NoContent();
+        }
+        [HttpGet]
+        public IActionResult GetLastUserId() 
+        { 
+            return Ok(_userRepository.GetLastUser());
         }
     }
 }
