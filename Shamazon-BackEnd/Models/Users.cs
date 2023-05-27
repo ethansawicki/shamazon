@@ -15,8 +15,6 @@ namespace Shamazon.Models
         public string? Email { get; set; }
         [Required(ErrorMessage = "Address is required")]
         public string? Address { get; set; }
-
-        [Required(ErrorMessage = "Uid Required")]
         public string FirebaseId { get; set; }
     }
 
@@ -25,5 +23,9 @@ namespace Shamazon.Models
         public int Id { get; set; }
         public string FirebaseId { get;set; }
 
+    }
+    public class LastUserId
+    {
+        public int Id { get; set; }
     }
 }

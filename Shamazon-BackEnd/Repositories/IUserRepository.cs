@@ -6,8 +6,10 @@ namespace Shamazon.Repositories
     {
         void DeleteAccount(int id);
         UserCheck GetUserByFirebaseId(string firebaseId);
-        void Update(Users user);
+        void UpdateUser(Users user);
 
         void AddNewUser(Users user);
+
+        LastUserId GetLastUser();
     }
 }
