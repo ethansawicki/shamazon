@@ -2,7 +2,9 @@ import { Route, Routes } from "react-router-dom"
 import { VisitorViewNav } from "./components/nav/VisitorViewNav"
 import { VisitorView } from "./components/views/VisitorView"
 
-export const ShamazonVisitorView = () => {
+export const ShamazonVisitorView = ({auth, setLoggedInUser}) => {
+
+
     return (
         <Routes>
             <Route
@@ -10,7 +12,7 @@ export const ShamazonVisitorView = () => {
                 element={
                     <>
                         <VisitorViewNav />
-                        <VisitorView />
+                        <VisitorView auth={auth} setLoggedInUser={setLoggedInUser} />
                     </>
                 }
             />

@@ -78,7 +78,7 @@ GO
 
 ALTER TABLE [Products] ADD FOREIGN KEY ([productCategoryId]) REFERENCES [productCategory] ([id])
 
-INSERT INTO dbo.[Users]([email],[firebaseid],[firstName],[lastName],[address]) VALUES ('FakeEmail@fake.com','uid1234','Fake','User','1234 BS BLVD')
+INSERT INTO dbo.[Users]([email],[firebaseid],[firstName],[lastName],[address]) VALUES ('FakeEmail@fake.com','C2IKGQgCCfgR5aljv0nXLxu7WQi2','Fake','User','1234 BS BLVD')
 
 INSERT INTO dbo.[productCategory]([categoryName]) VALUES ('PC Components')
 

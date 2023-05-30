@@ -21,10 +21,11 @@ export const VisitorViewNav = () => {
                     </Nav>
                     <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
                         <Popover>
-                            <Popover.Header as='h3'>Choose Option Below</Popover.Header>
+                            <Popover.Header as='h3'>Hello!</Popover.Header>
                             <Popover.Body>
+                            <p>Sign in or register below</p>
                                 <ButtonGroup>
-                                    <Button>Sign In</Button>
+                                    <Button href='/login'>Sign In</Button>
                                     <Button>Register</Button>
                                 </ButtonGroup>
                             </Popover.Body>

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using FirebaseAdmin;
 using Microsoft.AspNetCore.Mvc;
 using Shamazon.Models;
 using Shamazon.Repositories;
 using System.Net;
+using FirebaseAdmin.Auth;
 
 namespace Shamazon.Controllers
 {
@@ -16,7 +19,7 @@ namespace Shamazon.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("userCheck/{firebaseId}")]
+        [Authorize, HttpGet("userCheck/{firebaseId}")]
         public IActionResult GetUserByFirebaseId(string firebaseId) 
         {
             var user = _userRepository.GetUserByFirebaseId(firebaseId);
