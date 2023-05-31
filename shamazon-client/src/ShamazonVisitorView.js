@@ -12,7 +12,7 @@ export const ShamazonVisitorView = ({auth, setLoggedInUser}) => {
                 element={
                     <>
                         <VisitorViewNav />
-                        <VisitorView auth={auth} setLoggedInUser={setLoggedInUser} />
+                        <VisitorView setLoggedInUser={setLoggedInUser} />
                     </>
                 }
             />

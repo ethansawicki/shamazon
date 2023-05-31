@@ -14,8 +14,9 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser)
                 setLoggedInUser(true)
                 navigate("/")
             } else {
+                signOut(auth)
                 setLoggedInUser(false)
-                navigate("/register")
+                navigate("/login")
             }
         })
     } catch (err) {

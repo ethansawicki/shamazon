@@ -18,7 +18,7 @@ export const LoggedInUserNav = ({setLoggedInUser, auth}) => {
                                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                             </NavDropdown>
                     </Nav>
-                    <Navbar.Text>Signed in as: <Nav.Link onClick={() => {logout(setLoggedInUser)}}>{ auth.currentUser.email }</Nav.Link></Navbar.Text>
+                    <Navbar.Text>Signed in as: {  }</Navbar.Text>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

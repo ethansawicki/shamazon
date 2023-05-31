@@ -11,7 +11,7 @@ export const ShamazonLoggedInView = ({setLoggedInUser, auth}) => {
                     element={
                         <Authorized setLoggedInUser={setLoggedInUser}>
                             <>
-                                <LoggedInUserNav auth={auth} setLoggedInUser={setLoggedInUser} />
+                                <LoggedInUserNav setLoggedInUser={setLoggedInUser} />
                                 <LoggedInView />
                             </>
                         </Authorized>
