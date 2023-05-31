@@ -7,12 +7,12 @@ import Cookies from "js-cookie";
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
   const [firebaseUser, setFirebaseUser] = useState({})
-  // useEffect(
-  //   () => {
-  //     loggedInUser ? 
-  //   },
-  //   []
-  // )
+  useEffect(
+    () => {
+      firebaseUser ? setLoggedInUser(true) : setLoggedInUser(false)
+    },
+    []
+  )
 
   const auth = getAuth(app);
   
