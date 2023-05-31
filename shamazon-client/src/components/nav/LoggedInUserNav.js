@@ -1,7 +1,7 @@
 import { Navbar,Nav, NavDropdown, Container } from 'react-bootstrap';
-import { logout } from '../firebase/EmailFireBase';
 
-export const LoggedInUserNav = ({setLoggedInUser, auth}) => {
+export const LoggedInUserNav = () => {
+
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
@@ -18,7 +18,7 @@ export const LoggedInUserNav = ({setLoggedInUser, auth}) => {
                                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                             </NavDropdown>
                     </Nav>
-                    <Navbar.Text>Signed in as: {  }</Navbar.Text>
+                    <Navbar.Text>Signed in as:</Navbar.Text>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

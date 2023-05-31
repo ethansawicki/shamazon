@@ -1,12 +1,9 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import GoogleButton from 'react-google-button';
 
   
 export const VisitorViewNav = () => {
-    const location = useLocation();
-
-
-
+    
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
@@ -24,7 +21,7 @@ export const VisitorViewNav = () => {
                             </NavDropdown>
                     </Nav>
                     {
-                     !location.pathname.includes("login") ?
+                     
                         <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
                             <Popover>
                                 <Popover.Header as='h3'>Hello!</Popover.Header>
@@ -32,14 +29,15 @@ export const VisitorViewNav = () => {
                                 <p>Sign in or register below</p>
                                     <ButtonGroup>
                                         <Button href='/login'>Sign In</Button>
-                                        <Button>Register</Button>
+                                            <Button href='/register'>Register</Button>
                                     </ButtonGroup>
+                                    <GoogleButton onClick={() => {}}></GoogleButton>
                                 </Popover.Body>
                             </Popover>
                         }>
-                            <Button>Log In</Button>
+                            <Button variant="secondary">Log In</Button>
                             </OverlayTrigger>
-                            : null
+
                     }
                 </Navbar.Collapse>
             </Container>    

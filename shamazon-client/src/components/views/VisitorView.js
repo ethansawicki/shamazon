@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom"
-import { LoginWithEmail } from "../auth/EmailLogin"
+import { VisitorHome } from "../home/VisitorHome"
+import { LoginContainer } from "../auth/LoginContainer"
 
 export const VisitorView = ({auth, setLoggedInUser}) => {
     return (
         <Routes>
-            <Route path="/visitor" />
-            <Route path="/login" element={<LoginWithEmail auth={auth} setLoggedInUser={setLoggedInUser} />} />
+            <Route path="/" element={<VisitorHome />} />
+            <Route path="/login" element={<LoginContainer auth={auth} setLoggedInUser={setLoggedInUser} />} />
         </Routes>
     )
 }

@@ -1,8 +1,8 @@
-import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, inMemoryPersistence, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { userCheck } from "../fetchcalls/fetchCalls";
 
 
-export const logInWithEmail = async (email, password, navigate, setLoggedInUser) => {
+export const logInWithEmail = async (email, password, navigate, setLoggedInUser, open, setOpen) => {
     const auth = getAuth();
     try {
         await setPersistence(auth, browserSessionPersistence).then(async () => {
@@ -13,18 +13,16 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser)
             if (userCheck) {
                 setLoggedInUser(true)
                 navigate("/")
-            } else {
-                signOut(auth)
-                setLoggedInUser(false)
-                navigate("/login")
             }
         })
     } catch (err) {
         console.error(err)
+        setOpen(true)
+        signOut(auth)
     }
 }
 
-export const logout = (setLoggedInUser) => {
+export const logout = async (setLoggedInUser) => {
     const auth = getAuth();
     signOut(auth).then(() => {
         setLoggedInUser(false)

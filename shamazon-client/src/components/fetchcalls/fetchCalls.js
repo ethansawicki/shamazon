@@ -1,10 +1,9 @@
-import Cookies from "js-cookie"
+
 
 const api = "https://localhost:7145/api"
 
 export const userCheck = async (firebaseId, token) => {
     try {
-        
         const options = {
             method: "GET",
             headers: {

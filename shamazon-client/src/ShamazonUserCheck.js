@@ -6,7 +6,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
-  const firebaseUser = sessionStorage.getItem("firebase:authUser:AIzaSyCfw6KDeAsXygQFh5Nsx_T3u9asA1Jjdx4:[DEFAULT]")
+  //const firebaseUser = sessionStorage.getItem("firebase:authUser:AIzaSyCfw6KDeAsXygQFh5Nsx_T3u9asA1Jjdx4:[DEFAULT]")
   const auth = getAuth();
 
   
@@ -22,7 +22,7 @@ export const ShamazonUserCheck = ({app}) => {
   
 
   if (loggedInUser === true) {
-    return <ShamazonLoggedInView setLoggedInUser={setLoggedInUser} />
+    return <ShamazonLoggedInView loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
   } else {
     return  <ShamazonVisitorView setLoggedInUser={setLoggedInUser} />
   }

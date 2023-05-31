@@ -3,13 +3,13 @@ import { LoggedInUserNav } from "./components/nav/LoggedInUserNav"
 import { Authorized } from "./components/views/Authorized"
 import { LoggedInView } from "./components/views/LoggedInView"
 
-export const ShamazonLoggedInView = ({setLoggedInUser, auth}) => {
+export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, auth}) => {
     return (        
         <Routes>
                 <Route
                     path="*"
                     element={
-                        <Authorized setLoggedInUser={setLoggedInUser}>
+                        <Authorized loggedInUser={loggedInUser}>
                             <>
                                 <LoggedInUserNav setLoggedInUser={setLoggedInUser} />
                                 <LoggedInView />
