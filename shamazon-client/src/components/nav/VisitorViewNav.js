@@ -1,35 +1,40 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
 import GoogleButton from 'react-google-button';
+import { LinkContainer } from 'react-router-bootstrap';
 
   
-export const VisitorViewNav = () => {
-    
+export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen }) => {
+    const handleLoginModalOpen = () => {
+        setModalOpen(true)
+    }
+    const handleRegisterModalOpen = () => {
+        setRegisterModalOpen(true)
+    }
+
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
-                <Navbar.Brand href="/">Shamazon</Navbar.Brand>
+            <LinkContainer to='/visitorhome'><Navbar.Brand>Shamazon</Navbar.Brand></LinkContainer>
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href='/'>Eventual Link</Nav.Link>
-                            <NavDropdown title="Links" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Search</NavDropdown.Item>
+                        <LinkContainer to='/search'><Nav.Link>Search</Nav.Link></LinkContainer>
+                            <NavDropdown title="Categories" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.1">Category 1</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">
-                                    Categories
+                                    Category 2
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.3">Category 3</NavDropdown.Item>
                             </NavDropdown>
                     </Nav>
-                    {
-                     
                         <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
                             <Popover>
                                 <Popover.Header as='h3'>Hello!</Popover.Header>
                                 <Popover.Body>
                                 <p>Sign in or register below</p>
-                                    <ButtonGroup>
-                                        <Button href='/login'>Sign In</Button>
-                                            <Button href='/register'>Register</Button>
+                                <ButtonGroup>
+                                        <Button onClick={() => handleLoginModalOpen()}>Sign In</Button>
+                                        <Button onClick={() => handleRegisterModalOpen()}>Register</Button>
                                     </ButtonGroup>
                                     <GoogleButton onClick={() => {}}></GoogleButton>
                                 </Popover.Body>
@@ -37,8 +42,6 @@ export const VisitorViewNav = () => {
                         }>
                             <Button variant="secondary">Log In</Button>
                             </OverlayTrigger>
-
-                    }
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

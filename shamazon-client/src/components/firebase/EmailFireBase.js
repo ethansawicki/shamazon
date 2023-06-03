@@ -1,8 +1,8 @@
 import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { userCheck } from "../fetchcalls/fetchCalls";
+import { addNewUser, userCheck } from "../fetchcalls/fetchCalls";
 
 
-export const logInWithEmail = async (email, password, navigate, setLoggedInUser, open, setOpen) => {
+export const logInWithEmail = async (email, password, navigate, setLoggedInUser, openError, setOpenError) => {
     const auth = getAuth();
     try {
         await setPersistence(auth, browserSessionPersistence).then(async () => {
@@ -17,23 +17,28 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
         })
     } catch (err) {
         console.error(err)
-        setOpen(true)
+        setOpenError(true)
         signOut(auth)
     }
 }
 
-export const logout = async (setLoggedInUser) => {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-        setLoggedInUser(false)
-    })
+export const logout = (setLoggedInUser, auth, navigate) => {
+    signOut(auth)
+    setLoggedInUser(false)
+    sessionStorage.removeItem("__SESSION")
+    navigate("/")
 }
 
-export const registerWtihEmail = async (name, email, password) => {
+export const registerWithEmail = async (name, email, password) => {
+    const auth = getAuth();
      try {
-         const auth = getAuth();
-        const res = await createUserWithEmailAndPassword(auth, email, password);
-        const user = res.user;
+         await createUserWithEmailAndPassword(auth, email, password).then(async (userCred) => {
+             const userAuth = {}
+             userAuth.email = userCred.user.email;
+             userAuth.uid = userCred.user.uid;
+             await addNewUser()
+        })
+        
     } catch (err) {
         console.error(err)
     }

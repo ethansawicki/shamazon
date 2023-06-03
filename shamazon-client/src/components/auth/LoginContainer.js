@@ -1,11 +1,15 @@
 import { LoginWithEmail } from "./EmailLogin"
-import { useState } from "react";
 
 
-export const LoginContainer = ({setLoggedInUser}) => {
-    const [open, setOpen] = useState(false)
+export const LoginContainer = ({setLoggedInUser, modalOpen, setModalOpen, openError, setOpenError}) => {
 
     return (
-        <LoginWithEmail open={open} setLoggedInUser={setLoggedInUser} setOpen={setOpen} />
+            <LoginWithEmail
+                openError={openError}
+                setLoggedInUser={setLoggedInUser}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                setOpenError={setOpenError}
+            />           
     )
 }

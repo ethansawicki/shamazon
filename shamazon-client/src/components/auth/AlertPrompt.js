@@ -1,17 +1,13 @@
-import { useEffect } from "react";
 import { Alert } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
 
 
-export const ErrorAlert = ({ open, setOpen }) => {
-    const navigate = useNavigate();
+export const ErrorAlert = ({ openError, setOpenError }) => {
 
     const handleClose = () => {
-        setOpen(false)
-        navigate("/login")
+        setOpenError(false)
     }
 
-    if (open) {
+    if (openError) {
         return (
             <Alert variant="danger" onClose={() => handleClose()} dismissible>
                 <Alert.Heading>Error: </Alert.Heading>

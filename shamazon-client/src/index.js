@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ShamazonUserCheck } from './ShamazonUserCheck';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,8 +11,10 @@ const app = initializeApp(firebaseConfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <ShamazonUserCheck app={app} />
-  </BrowserRouter>
+  <StrictMode>
+    <BrowserRouter>
+      <ShamazonUserCheck app={app} />
+    </BrowserRouter>
+  </StrictMode>
   
 );

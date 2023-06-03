@@ -18,3 +18,24 @@ export const userCheck = async (firebaseId, token) => {
         console.error(err)
     }
 }
+
+export const getProducts = async () => {
+    try {
+        const options = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        const request = await fetch(`${api}/Products`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const addNewUser = async () => {
+    
+}

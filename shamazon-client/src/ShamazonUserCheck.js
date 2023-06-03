@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
 import { ShamazonLoggedInView } from "./ShamazonLoggedInView";
 import { ShamazonVisitorView } from "./ShamazonVisitorView";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 
 
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
-  //const firebaseUser = sessionStorage.getItem("firebase:authUser:AIzaSyCfw6KDeAsXygQFh5Nsx_T3u9asA1Jjdx4:[DEFAULT]")
-  const auth = getAuth();
+  const auth = getAuth(app);
 
+
+    
   
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setLoggedInUser(true)
-      const uid = auth.currentUser.uid
-      } else {
-      setLoggedInUser(false)
-      }
-  })
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getIdToken(user).then((token) => {sessionStorage.setItem("__SESSION", token)})
+        setLoggedInUser(true)
+        } else {
+        setLoggedInUser(false)
+        }
+    })
+  },[auth])
   
-
   if (loggedInUser === true) {
-    return <ShamazonLoggedInView loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+    return <ShamazonLoggedInView
+      auth={auth}
+      loggedInUser={loggedInUser}
+      setLoggedInUser={setLoggedInUser}
+    />
   } else {
-    return  <ShamazonVisitorView setLoggedInUser={setLoggedInUser} />
+    return <ShamazonVisitorView
+      auth={auth}
+      loggedInUser={loggedInUser}
+      setLoggedInUser={setLoggedInUser}
+    />
   }
 }

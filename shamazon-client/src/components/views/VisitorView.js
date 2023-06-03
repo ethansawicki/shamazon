@@ -1,12 +1,15 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import { VisitorHome } from "../home/VisitorHome"
-import { LoginContainer } from "../auth/LoginContainer"
+import { SearchComponent } from "../search/Search"
 
-export const VisitorView = ({auth, setLoggedInUser}) => {
+
+export const VisitorView = () => {
+    
     return (
         <Routes>
-            <Route path="/" element={<VisitorHome />} />
-            <Route path="/login" element={<LoginContainer auth={auth} setLoggedInUser={setLoggedInUser} />} />
+            <Route path="/" element={<Navigate replace to={`/visitorhome`}   /> } />
+            <Route path="visitorhome" element={<VisitorHome />} />
+            <Route path="search" element={<SearchComponent />} />
         </Routes>
     )
 }
