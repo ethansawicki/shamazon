@@ -8,7 +8,8 @@ export const LoggedInView = ({ setLoggedInUser, loggedInUser, auth }) => {
     return (
         <Routes>
             <Route path="/" element={<Navigate replace to={`/userhome`} />} />
-            <Route path="userhome" element={<LoggedInHome />} />
+            <Route path="userhome" element={<LoggedInHome />}
+             />
             <Route path="account" element={<AccountComponent setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} auth={auth} />} />
             <Route path="search" element={<SearchComponent />} />
             <Route path="login" element={<Navigate to={`/userhome`} />} />

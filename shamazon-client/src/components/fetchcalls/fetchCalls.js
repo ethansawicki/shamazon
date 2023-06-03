@@ -1,3 +1,4 @@
+import { getIdToken } from "firebase/auth"
 
 
 const api = "https://localhost:7145/api"
@@ -36,6 +37,22 @@ export const getProducts = async () => {
     }
 }
 
-export const addNewUser = async () => {
-    
+export const addNewUser = async (registerUser) => {
+    const token = await getIdToken();
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(registerUser)
+        }
+        const request = await fetch(`${api}/Users`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        
+    }
 }

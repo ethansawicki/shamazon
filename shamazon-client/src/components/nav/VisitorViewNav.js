@@ -3,12 +3,22 @@ import GoogleButton from 'react-google-button';
 import { LinkContainer } from 'react-router-bootstrap';
 
   
-export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen }) => {
+export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, registerModalOpen }) => {
     const handleLoginModalOpen = () => {
-        setModalOpen(true)
+        if (registerModalOpen === true) {
+            setRegisterModalOpen(false)
+            setModalOpen(true)
+        } else {
+            setModalOpen(true)
+        }
     }
     const handleRegisterModalOpen = () => {
-        setRegisterModalOpen(true)
+        if (modalOpen === true) {
+            setModalOpen(false)
+            setRegisterModalOpen(true)
+        } else {
+            setRegisterModalOpen(true)
+        }
     }
 
     return (
@@ -33,8 +43,8 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen }) => {
                                 <Popover.Body>
                                 <p>Sign in or register below</p>
                                 <ButtonGroup>
-                                        <Button onClick={() => handleLoginModalOpen()}>Sign In</Button>
-                                        <Button onClick={() => handleRegisterModalOpen()}>Register</Button>
+                                    <Button onClick={() => {handleLoginModalOpen()}}>Sign In</Button>
+                                    <Button onClick={() => { handleRegisterModalOpen() }}>Register</Button>
                                     </ButtonGroup>
                                     <GoogleButton onClick={() => {}}></GoogleButton>
                                 </Popover.Body>

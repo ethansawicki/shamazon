@@ -52,14 +52,13 @@ namespace Shamazon.Repositories
                             SET Email = @email,
                                 firstName = @firstName,
                                 lastName = @lastName,
+                                displayName = @displayName,
                                 Address = @address,
                                 firebaseId = @firebaseId
                         WHERE id = @Id";
 
                     DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@firstName", user.FirstName);
-                    DbUtils.AddParameter(cmd, "@lastName", user.LastName);
-                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
                     DbUtils.AddParameter(cmd, "@Id", user.Id);
 
@@ -89,15 +88,13 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Users] ([email],[firebaseId],[firstName],[lastName],[address])
+                        INSERT INTO [Users] ([email],[firebaseId],[displayName])
                         OUTPUT INSERTED.ID
-                        VALUES (@email, @firebaseId, @firstName, @lastName, @address)";
+                        VALUES (@email, @firebaseId, @displayName)";
 
                     DbUtils.AddParameter(cmd, "@email", user.Email);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
-                    DbUtils.AddParameter(cmd, "@firstName", user.FirstName);
-                    DbUtils.AddParameter(cmd, "@lastName", user.LastName);
-                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@firstName", user.DisplayName);
 
                     user.Id = (int)cmd.ExecuteScalar();
                 }

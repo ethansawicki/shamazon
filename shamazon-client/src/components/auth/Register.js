@@ -4,13 +4,18 @@ import { ErrorAlert } from "./AlertPrompt"
 import { useNavigate } from "react-router-dom"
 
 export const Register = ({registerModalOpen, setRegisterModalOpen, setLoggedInUser, openError, setOpenError}) => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [register, setRegister] = useState({})
     const navigate = useNavigate();
 
     const handleClose = () => {
         setRegisterModalOpen(false)
         navigate("/")
+    }
+
+    const handleChange = (e) => {
+        const copy = { ...register }
+        copy[e.target.id] = e.target.value
+        setRegister(copy)
     }
 
     const handleRegister = async () => {
@@ -27,15 +32,18 @@ export const Register = ({registerModalOpen, setRegisterModalOpen, setLoggedInUs
                 <ErrorAlert openError={openError} setOpenError={setOpenError} />
                     <Form>
                         <FloatingLabel controlId="email" label="Email Address" className="mb-3">
-                            <Form.Control type="email" onChange={(e) => { setEmail(e.target.id = e.target.value) }} placeholder="name@example.com" />
+                            <Form.Control type="email" onChange={handleChange} placeholder="name@example.com" />
                         </FloatingLabel>
                         <FloatingLabel controlId="password" label="Password" className="mb-3">
-                            <Form.Control type="password" onChange={(e) => { setPassword(e.target.id = e.target.value) }} placeholder="Password" />
+                            <Form.Control type="password" onChange={handleChange} placeholder="Password" />
+                        </FloatingLabel>
+                        <FloatingLabel controlId="displayName" label="Display Name" className="mb-3">
+                            <Form.Control type="input" onChange={handleChange} placeholder="Display Name" />
                         </FloatingLabel>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => {handleRegister()}}>Register</Button>
+                    <Button variant="primary" onClick={() => {handleRegister()}}>Submit</Button>
                     <Button variant="danger" onClick={handleClose} >Cancel</Button>
                 </Modal.Footer>
             </Modal>

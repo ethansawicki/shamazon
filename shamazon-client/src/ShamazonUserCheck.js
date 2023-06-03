@@ -20,7 +20,7 @@ export const ShamazonUserCheck = ({app}) => {
         setLoggedInUser(false)
         }
     })
-  },[auth])
+  },[])
   
   if (loggedInUser === true) {
     return <ShamazonLoggedInView
