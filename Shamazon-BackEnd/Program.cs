@@ -42,6 +42,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddTransient<IOrderHistoryRepository, OrderHistoryRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
+builder.Services.AddTransient<IUserProfilesRepository, UserProfilesRepository>();
 builder.Services.AddStripeInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -76,7 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

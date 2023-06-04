@@ -11,5 +11,6 @@ namespace Shamazon.Repositories
         void AddNewUser(Users user);
 
         LastUserId GetLastUser();
+        FindUser FindUserByFirebaseId(string firebaseId);
     }
 }

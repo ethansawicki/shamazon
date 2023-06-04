@@ -1,6 +1,6 @@
 
 
-export const LoginWtihGoogle = () => {
+export const AccountUserProfile = () => {
     return (
         <>
         </>

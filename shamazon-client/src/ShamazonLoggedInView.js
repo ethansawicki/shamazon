@@ -1,18 +1,29 @@
 import { Route, Routes } from "react-router-dom"
-import { LoggedInUserNav } from "./components/nav/LoggedInUserNav"
 import { Authorized } from "./components/views/Authorized"
 import { LoggedInView } from "./components/views/LoggedInView"
+import { NavbarContainer } from "./components/nav/NavContainer"
 
-export const ShamazonLoggedInView = ({setLoggedInUser}) => {
+export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName, setUserInfo, userInfo}) => {
     return (        
         <Routes>
                 <Route
                     path="*"
                     element={
-                        <Authorized setLoggedInUser={setLoggedInUser}>
+                        <Authorized loggedInUser={loggedInUser}>
                             <>
-                                <LoggedInUserNav />
-                                <LoggedInView />
+                                <NavbarContainer
+                                    displayName={displayName}
+                                    setLoggedInUser={setLoggedInUser}
+                                    loggedInUser={loggedInUser}
+                                    setUserInfo={setUserInfo}
+                                    userInfo={userInfo}
+                                />
+                                <LoggedInView
+                                    setLoggedInUser={setLoggedInUser}
+                                    loggedInUser={loggedInUser}
+                                    setUserInfo={setUserInfo}
+                                    userInfo={userInfo}
+                                />
                             </>
                         </Authorized>
                     }

@@ -40,6 +40,40 @@ namespace Shamazon.Repositories
                 }
             }
         }
+        public FindUser FindUserByFirebaseId(string firebaseId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        select id, firebaseId, displayName, email FROM Users
+                        WHERE firebaseId = @firebaseId";
+
+                    DbUtils.AddParameter(cmd, "@firebaseId", firebaseId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    FindUser findUser = new FindUser();
+
+                    if (reader.Read())
+                    {
+                        findUser = new FindUser()
+                        {
+                            Id = DbUtils.GetInt(reader, "id"),
+                            FirebaseId = DbUtils.GetString(reader, "firebaseId"),
+                            DisplayName = DbUtils.GetString(reader, "displayName"),
+                            Email = DbUtils.GetString(reader, "email")
+                        };
+                    }
+
+                    reader.Close();
+
+                    return findUser;
+                }
+            }
+        }
         public void UpdateUser(Users user)
         {
             using (var conn = Connection)
@@ -52,14 +86,13 @@ namespace Shamazon.Repositories
                             SET Email = @email,
                                 firstName = @firstName,
                                 lastName = @lastName,
+                                displayName = @displayName,
                                 Address = @address,
                                 firebaseId = @firebaseId
                         WHERE id = @Id";
 
                     DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@firstName", user.FirstName);
-                    DbUtils.AddParameter(cmd, "@lastName", user.LastName);
-                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
                     DbUtils.AddParameter(cmd, "@Id", user.Id);
 
@@ -89,15 +122,13 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Users] ([email],[firebaseId],[firstName],[lastName],[address])
+                        INSERT INTO [Users] ([email],[firebaseId],[displayName])
                         OUTPUT INSERTED.ID
-                        VALUES (@email, @firebaseId, @firstName, @lastName, @address)";
+                        VALUES (@email, @firebaseId, @displayName)";
 
                     DbUtils.AddParameter(cmd, "@email", user.Email);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
-                    DbUtils.AddParameter(cmd, "@firstName", user.FirstName);
-                    DbUtils.AddParameter(cmd, "@lastName", user.LastName);
-                    DbUtils.AddParameter(cmd, "@address", user.Address);
+                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
 
                     user.Id = (int)cmd.ExecuteScalar();
                 }

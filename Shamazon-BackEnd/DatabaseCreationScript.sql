@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS [Users]
 DROP TABLE IF EXISTS [Orders]
 DROP TABLE IF EXISTS [Products]
 DROP TABLE IF EXISTS [OrderItem]
+DROP TABLE IF EXISTS [UserProfile]
 
 CREATE TABLE [Orders] (
 	[id] int PRIMARY KEY IDENTITY NOT NULL,
@@ -54,13 +55,20 @@ CREATE TABLE [productCategory] (
 )
 GO
 
+CREATE TABLE [UserProfile](
+	[id] int PRIMARY KEY IDENTITY NOT NULL,
+	[userId] int,
+	[firstName] nvarchar(255),
+	[lastName] nvarchar(255),
+	[address] nvarchar(255)
+)
+GO
+
 CREATE TABLE [Users] (
 	[id] int PRIMARY KEY IDENTITY NOT NULL,
 	[email] nvarchar(255),
 	[firebaseId] nvarchar(255),
-	[firstName] nvarchar(255),
-	[lastName] nvarchar(255),
-	[address] nvarchar(255)
+	[displayName] nvarchar(255),
 )
 GO
 
@@ -76,9 +84,15 @@ GO
 ALTER TABLE [OrderHistory] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
 GO
 
-ALTER TABLE [Products] ADD FOREIGN KEY ([productCategoryId]) REFERENCES [productCategory] ([id])
+ALTER TABLE [UserProfile] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
+GO
 
-INSERT INTO dbo.[Users]([email],[firebaseid],[firstName],[lastName],[address]) VALUES ('FakeEmail@fake.com','uid1234','Fake','User','1234 BS BLVD')
+ALTER TABLE [Products] ADD FOREIGN KEY ([productCategoryId]) REFERENCES [productCategory] ([id])
+GO
+
+INSERT INTO dbo.[Users]([email],[firebaseid],[displayName]) VALUES ('FakeEmail@fake.com','C2IKGQgCCfgR5aljv0nXLxu7WQi2','TestUser')
+
+INSERT INTO dbo.[UserProfile]([userId],[firstName],[lastName],[address]) VALUES (1,'Fake','User','1234 Fake Way')
 
 INSERT INTO dbo.[productCategory]([categoryName]) VALUES ('PC Components')
 
