@@ -26,11 +26,26 @@ namespace Shamazon.Controllers
             if (user == null)
             {
                 return NotFound();
+            } 
+            else if(firebaseId == user.FirebaseId)
+            {
+                return BadRequest();
             }
             return Ok(user);
         }
 
-        [HttpPost]
+        [Authorize, HttpGet("finduser/{firebaseId}")]
+        public IActionResult FindUserByFirebaseId(string firebaseId)
+        {
+            var user = _userRepository.FindUserByFirebaseId(firebaseId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [Authorize, HttpPost]
         public IActionResult AddNewUser(Users user)
         {
             _userRepository.AddNewUser(user);

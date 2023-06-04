@@ -2,8 +2,9 @@ import { useState } from "react"
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap"
 import { ErrorAlert } from "./AlertPrompt"
 import { useNavigate } from "react-router-dom"
+import { registerWithEmail } from "../firebase/EmailFireBase"
 
-export const Register = ({registerModalOpen, setRegisterModalOpen, setLoggedInUser, openError, setOpenError}) => {
+export const Register = ({registerModalOpen, setRegisterModalOpen, setUserInfo, openError, setOpenError}) => {
     const [register, setRegister] = useState({})
     const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ export const Register = ({registerModalOpen, setRegisterModalOpen, setLoggedInUs
     }
 
     const handleRegister = async () => {
-
+       await registerWithEmail(register, navigate, setUserInfo)
     }
 
     return (

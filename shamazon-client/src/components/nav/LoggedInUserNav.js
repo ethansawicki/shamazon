@@ -1,8 +1,8 @@
 import { Navbar,Nav, NavDropdown, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-export const LoggedInUserNav = ({auth}) => {
-
+export const LoggedInUserNav = ({displayName}) => {
+    
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
@@ -18,7 +18,7 @@ export const LoggedInUserNav = ({auth}) => {
                                 <NavDropdown.Item href="#action/3.3">Category 3</NavDropdown.Item>
                             </NavDropdown>
                     </Nav>
-                    <Navbar.Text>Signed in as: <LinkContainer to={`/logout`}><Nav.Link>{ auth.currentUser.displayName }</Nav.Link></LinkContainer></Navbar.Text>
+                    <Navbar.Text>Signed in as: <LinkContainer to={`/logout`}><Nav.Link>{ displayName }</Nav.Link></LinkContainer></Navbar.Text>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

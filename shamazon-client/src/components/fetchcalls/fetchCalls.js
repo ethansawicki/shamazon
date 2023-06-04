@@ -1,4 +1,4 @@
-import { getIdToken } from "firebase/auth"
+import { getAuth } from "firebase/auth"
 
 
 const api = "https://localhost:7145/api"
@@ -12,9 +12,13 @@ export const userCheck = async (firebaseId, token) => {
             }
         }
         const request = await fetch(`${api}/Users/userCheck/${firebaseId}`, options)
-        const reqJSON = await request.json()
-        const resp = reqJSON
-        return resp
+        if (request.status === 400) {
+            throw new Error('User Exists. Try passsword change')
+        } else {
+            const reqJSON = await request.json()
+            const resp = reqJSON
+            return resp
+        }
     } catch (err) {
         console.error(err)
     }
@@ -37,8 +41,7 @@ export const getProducts = async () => {
     }
 }
 
-export const addNewUser = async (registerUser) => {
-    const token = await getIdToken();
+export const addNewUser = async (registerUser, token, setUserInfo) => {
     try {
         const options = {
             method: "POST",
@@ -51,8 +54,32 @@ export const addNewUser = async (registerUser) => {
         const request = await fetch(`${api}/Users`, options)
         const requestJSON = await request.json()
         const response = requestJSON
+        setUserInfo(response)
         return response
     } catch (error) {
-        
+        console.error(error)
+    }
+}
+
+
+export const ifUserInSessionGetUser = async () => {
+    const auth = getAuth();
+    const token = await auth.currentUser.getIdToken();
+    console.log(token)
+    const user = auth.currentUser.uid
+    try {
+        const options = {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }
+        const request = await fetch(`${api}/Users/finduser/${user}`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
     }
 }

@@ -1,5 +1,4 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
-import GoogleButton from 'react-google-button';
 import { LinkContainer } from 'react-router-bootstrap';
 
   
@@ -45,12 +44,12 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                                 <ButtonGroup>
                                     <Button onClick={() => {handleLoginModalOpen()}}>Sign In</Button>
                                     <Button onClick={() => { handleRegisterModalOpen() }}>Register</Button>
+                                    <Button onClick={() => {}}>Google</Button>
                                     </ButtonGroup>
-                                    <GoogleButton onClick={() => {}}></GoogleButton>
                                 </Popover.Body>
                             </Popover>
                         }>
-                            <Button variant="secondary">Log In</Button>
+                            <Button variant="secondary">Log In or Sign Up</Button>
                             </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    

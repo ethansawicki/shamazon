@@ -34,26 +34,26 @@ export const logout = (setLoggedInUser, navigate) => {
     } 
 }
 
-export const registerWithEmail = async (registerUser, setLoggedInUser) => {
+export const registerWithEmail = async (registerUser, setLoggedInUser, setUserInfo) => {
     const auth = getAuth();
     const userAuth = {}
      try {
-         await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password, registerUser.displayName).then(async (userCred) => {
-             userAuth.email = userCred.user.email;
-             userAuth.uid = userCred.user.uid;
-             userAuth.displayName = userCred.user.displayName;
-         }).then(async () => {
-             const token = await auth.currentUser.getIdToken()
-             await userCheck(auth.currentUser.uid, token)
-             if (userCheck) {
-                 console.log("user exists dont make new user")
-                 signOut(auth)
-             } else {
-                 await addNewUser(userAuth)
-             }
+        await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password).then(async (userCred) => {
+            userAuth.email = userCred.user.email;
+            userAuth.firebaseId = userCred.user.uid;
+            userAuth.displayName = registerUser.displayName
+            const token = await auth.currentUser.getIdToken()
+            try {
+                await userCheck(auth.currentUser.uid, token)
+                await addNewUser(userAuth, token, setUserInfo)
+                setLoggedInUser(true)
+            } catch (error) {
+                console.error(error)
+            }
         })
-        
     } catch (error) {
-        console.error(error)
+         console.error(error)
+         signOut(auth)
+         sessionStorage.removeItem("__SESSION")
     }
 }

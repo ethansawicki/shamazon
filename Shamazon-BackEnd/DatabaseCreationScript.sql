@@ -85,8 +85,10 @@ ALTER TABLE [OrderHistory] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
 GO
 
 ALTER TABLE [UserProfile] ADD FOREIGN KEY ([userId]) REFERENCES [Users] ([id])
+GO
 
 ALTER TABLE [Products] ADD FOREIGN KEY ([productCategoryId]) REFERENCES [productCategory] ([id])
+GO
 
 INSERT INTO dbo.[Users]([email],[firebaseid],[displayName]) VALUES ('FakeEmail@fake.com','C2IKGQgCCfgR5aljv0nXLxu7WQi2','TestUser')
 

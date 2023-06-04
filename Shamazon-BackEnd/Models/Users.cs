@@ -23,4 +23,11 @@ namespace Shamazon.Models
     {
         public int Id { get; set; }
     }
+    public class FindUser
+    {
+        public int Id { get; set; }
+        public string DisplayName { get; set; }
+        public string FirebaseId { get; set; }
+        public string Email { get; set; }
+    }
 }

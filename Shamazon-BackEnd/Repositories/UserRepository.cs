@@ -40,6 +40,40 @@ namespace Shamazon.Repositories
                 }
             }
         }
+        public FindUser FindUserByFirebaseId(string firebaseId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        select id, firebaseId, displayName, email FROM Users
+                        WHERE firebaseId = @firebaseId";
+
+                    DbUtils.AddParameter(cmd, "@firebaseId", firebaseId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    FindUser findUser = new FindUser();
+
+                    if (reader.Read())
+                    {
+                        findUser = new FindUser()
+                        {
+                            Id = DbUtils.GetInt(reader, "id"),
+                            FirebaseId = DbUtils.GetString(reader, "firebaseId"),
+                            DisplayName = DbUtils.GetString(reader, "displayName"),
+                            Email = DbUtils.GetString(reader, "email")
+                        };
+                    }
+
+                    reader.Close();
+
+                    return findUser;
+                }
+            }
+        }
         public void UpdateUser(Users user)
         {
             using (var conn = Connection)
@@ -94,7 +128,7 @@ namespace Shamazon.Repositories
 
                     DbUtils.AddParameter(cmd, "@email", user.Email);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
-                    DbUtils.AddParameter(cmd, "@firstName", user.DisplayName);
+                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
 
                     user.Id = (int)cmd.ExecuteScalar();
                 }
