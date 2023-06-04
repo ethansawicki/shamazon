@@ -25,7 +25,7 @@ namespace Shamazon.Controllers
             var user = _userRepository.GetUserByFirebaseId(firebaseId);
             if (user == null)
             {
-                return NotFound();
+                return Ok("User doesnt Exist");
             } 
             else if(firebaseId == user.FirebaseId)
             {

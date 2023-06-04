@@ -1,7 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { LoggedInHome } from "../home/LoggedInHome"
-import { AccountComponent } from "../Account/Account"
 import { SearchComponent } from "../search/Search"
+import { AccountUserProfile } from "../Account/AccountUserProfile"
+import { ProductsContainer } from "../products/ProductsContainer"
 
 export const LoggedInView = ({ setLoggedInUser, loggedInUser, userInfo, setUserInfo }) => {
     
@@ -11,12 +12,13 @@ export const LoggedInView = ({ setLoggedInUser, loggedInUser, userInfo, setUserI
             <Route path="userhome" element={<LoggedInHome />}
              />
             <Route path="account" element={
-                <AccountComponent
+                <AccountUserProfile
                     setLoggedInUser={setLoggedInUser}
                     userInfo={userInfo}
                     setUserInfo={setUserInfo}
                     loggedInUser={loggedInUser} />} />
             <Route path="search" element={<SearchComponent />} />
+            <Route path="accountproducts" element={<ProductsContainer />} />
             <Route path="login" element={<Navigate to={`/userhome`} />} />
         </Routes>
     )

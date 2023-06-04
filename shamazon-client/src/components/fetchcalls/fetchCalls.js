@@ -13,7 +13,7 @@ export const userCheck = async (firebaseId, token) => {
         }
         const request = await fetch(`${api}/Users/userCheck/${firebaseId}`, options)
         if (request.status === 400) {
-            throw new Error('User Exists. Try passsword change')
+            throw new Error('User Exists.')
         } else {
             const reqJSON = await request.json()
             const resp = reqJSON
@@ -65,7 +65,6 @@ export const addNewUser = async (registerUser, token, setUserInfo) => {
 export const ifUserInSessionGetUser = async () => {
     const auth = getAuth();
     const token = await auth.currentUser.getIdToken();
-    console.log(token)
     const user = auth.currentUser.uid
     try {
         const options = {

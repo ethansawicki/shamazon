@@ -3,7 +3,7 @@ import { Authorized } from "./components/views/Authorized"
 import { LoggedInView } from "./components/views/LoggedInView"
 import { NavbarContainer } from "./components/nav/NavContainer"
 
-export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName, setUserInfo, userInfo}) => {
+export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName, setUserInfo, userInfo, navigate}) => {
     return (        
         <Routes>
                 <Route
@@ -17,6 +17,7 @@ export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName
                                     loggedInUser={loggedInUser}
                                     setUserInfo={setUserInfo}
                                     userInfo={userInfo}
+                                    navigate={navigate}
                                 />
                                 <LoggedInView
                                     setLoggedInUser={setLoggedInUser}

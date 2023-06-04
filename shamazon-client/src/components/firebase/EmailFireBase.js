@@ -22,13 +22,12 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
     }
 }
 
-export const logout = (setLoggedInUser, navigate) => {
+export const logout = (setLoggedInUser) => {
     const auth = getAuth();
     try { 
         signOut(auth)  
         setLoggedInUser(false)
         sessionStorage.removeItem("__SESSION")
-        navigate("/")
     } catch (err) {
         console.error(err)
     } 

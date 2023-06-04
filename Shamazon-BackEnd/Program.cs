@@ -43,6 +43,7 @@ builder.Services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddTransient<IOrderHistoryRepository, OrderHistoryRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
 builder.Services.AddTransient<IUserProfilesRepository, UserProfilesRepository>();
+builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
 builder.Services.AddStripeInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,8 +1,11 @@
-import { Navbar,Nav, NavDropdown, Container } from 'react-bootstrap';
+import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { logout } from '../firebase/EmailFireBase';
 
-export const LoggedInUserNav = ({displayName}) => {
-    
+export const LoggedInUserNav = ({displayName, setLoggedInUser}) => {
+    const handleLogout = () => {
+       logout(setLoggedInUser)
+    }
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
@@ -18,7 +21,17 @@ export const LoggedInUserNav = ({displayName}) => {
                                 <NavDropdown.Item href="#action/3.3">Category 3</NavDropdown.Item>
                             </NavDropdown>
                     </Nav>
-                    <Navbar.Text>Signed in as: <LinkContainer to={`/logout`}><Nav.Link>{ displayName }</Nav.Link></LinkContainer></Navbar.Text>
+                    <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
+                            <Popover>
+                            <Popover.Header as='h3'>Hello! { displayName }</Popover.Header>
+                                <Popover.Body>
+                                <p style={{textAlign: "center"}}>Sign Out?</p>
+                                    <Button variant='danger' size='lg' onClick={() => { handleLogout() }}>Sign Out</Button>
+                                </Popover.Body>
+                            </Popover>
+                        }>
+                    <Navbar.Text>Signed in as: <a href='#'>{ displayName }</a></Navbar.Text>
+                    </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

@@ -38,9 +38,9 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                     </Nav>
                         <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
                             <Popover>
-                                <Popover.Header as='h3'>Hello!</Popover.Header>
+                                <Popover.Header style={{textAlign: "center"}} as='h3'>Hello!</Popover.Header>
                                 <Popover.Body>
-                                <p>Sign in or register below</p>
+                                <p style={{textAlign: "center"}}>Sign in or register below</p>
                                 <ButtonGroup>
                                     <Button onClick={() => {handleLoginModalOpen()}}>Sign In</Button>
                                     <Button onClick={() => { handleRegisterModalOpen() }}>Register</Button>
@@ -49,7 +49,7 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                                 </Popover.Body>
                             </Popover>
                         }>
-                            <Button variant="secondary">Log In or Sign Up</Button>
+                            <Button variant="success" size='sm'>Log In or Sign Up</Button>
                             </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    

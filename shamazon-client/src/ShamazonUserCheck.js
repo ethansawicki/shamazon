@@ -39,6 +39,7 @@ export const ShamazonUserCheck = ({app}) => {
       loggedInUser={loggedInUser}
       setLoggedInUser={setLoggedInUser}
       displayName={displayName}
+      navigate={navigate}
     />
   } else {
     return <ShamazonVisitorView

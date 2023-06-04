@@ -41,7 +41,7 @@ export const ShamazonVisitorView = ({auth, setLoggedInUser, loggedInUser, setUse
                             setOpenError={setOpenError}
                         />
                         <VisitorView
-                            
+                            loggedInUser={loggedInUser}
                         />
                     </>
                 }
