@@ -20,7 +20,7 @@ export const Register = ({registerModalOpen, setRegisterModalOpen, setUserInfo, 
     }
 
     const handleRegister = async () => {
-       await registerWithEmail(register, navigate, setUserInfo)
+       await registerWithEmail(register, navigate, setUserInfo, setOpenError)
     }
 
     return (

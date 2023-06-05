@@ -20,5 +20,15 @@ namespace Shamazon.Controllers
         {
             return Ok(_productsRepository.GetAllProducts());
         }
+        [HttpGet("specificproduct/{id}")]
+        public IActionResult GetById(int id) 
+        { 
+            var product = _productsRepository.GetSpecificProduct(id);
+            if(product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
     }
 }

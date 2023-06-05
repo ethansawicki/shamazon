@@ -84,8 +84,6 @@ namespace Shamazon.Repositories
                     cmd.CommandText = @"
                         UPDATE Users
                             SET Email = @email,
-                                firstName = @firstName,
-                                lastName = @lastName,
                                 displayName = @displayName,
                                 Address = @address,
                                 firebaseId = @firebaseId

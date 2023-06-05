@@ -23,7 +23,7 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
-            <LinkContainer to='/visitorhome'><Navbar.Brand>Shamazon</Navbar.Brand></LinkContainer>
+            <LinkContainer to='/'><Navbar.Brand>Shamazon</Navbar.Brand></LinkContainer>
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">

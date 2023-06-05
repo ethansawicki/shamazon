@@ -31,3 +31,4 @@ namespace Shamazon.Models
         public string Email { get; set; }
     }
 }
+

@@ -82,3 +82,23 @@ export const ifUserInSessionGetUser = async () => {
         console.error(error)
     }
 }
+
+export const getUserProfileById = async (userId) => {
+    const auth = getAuth();
+    const token = await auth.currentUser.getIdToken();
+    try {
+        const options = {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }
+        const request = await fetch(`${api}/UserProfiles/userprofile/user/${userId}`, options)
+        const requestJSON = await request.json()
+        const response = await requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}

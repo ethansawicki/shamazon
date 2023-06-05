@@ -8,11 +8,12 @@ export const NavbarContainer = ({ loggedInUser,
     setRegisterModalOpen,
     registerModalOpen,
     modalOpen,
+    userInfo,
     setLoggedInUser,
  }) => {
     
     if (loggedInUser === true) {
-        return <LoggedInUserNav displayName={displayName} setLoggedInUser={setLoggedInUser} />
+        return <LoggedInUserNav displayName={displayName} userInfo={userInfo} setLoggedInUser={setLoggedInUser} />
     } else {
         return <VisitorViewNav setRegisterModalOpen={setRegisterModalOpen} registerModalOpen={registerModalOpen} modalOpen={modalOpen} setModalOpen={setModalOpen} />
     }

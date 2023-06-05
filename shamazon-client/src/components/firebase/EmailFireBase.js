@@ -1,5 +1,5 @@
 import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { addNewUser, userCheck } from "../fetchcalls/fetchCalls";
+import { addNewUser, ifUserInSessionGetUser, userCheck } from "../fetchcalls/fetchCalls";
 
 
 export const logInWithEmail = async (email, password, navigate, setLoggedInUser, setOpenError) => {
@@ -9,8 +9,8 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
             return await signInWithEmailAndPassword(auth, email, password);    
         }).then(async () => {
             const token = await auth.currentUser.getIdToken()
-            await userCheck(auth.currentUser.uid, token)
-            if (userCheck) {
+            await ifUserInSessionGetUser(auth.currentUser.uid, token)
+            if (ifUserInSessionGetUser) {
                 setLoggedInUser(true)
                 navigate("/")
             }
@@ -33,7 +33,7 @@ export const logout = (setLoggedInUser) => {
     } 
 }
 
-export const registerWithEmail = async (registerUser, setLoggedInUser, setUserInfo) => {
+export const registerWithEmail = async (registerUser, setLoggedInUser, setUserInfo, setOpenError) => {
     const auth = getAuth();
     const userAuth = {}
      try {
@@ -52,6 +52,7 @@ export const registerWithEmail = async (registerUser, setLoggedInUser, setUserIn
         })
     } catch (error) {
          console.error(error)
+         setOpenError(true)
          signOut(auth)
          sessionStorage.removeItem("__SESSION")
     }

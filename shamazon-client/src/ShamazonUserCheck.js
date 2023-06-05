@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ShamazonLoggedInView } from "./ShamazonLoggedInView";
 import { ShamazonVisitorView } from "./ShamazonVisitorView";
 import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
@@ -13,15 +13,18 @@ export const ShamazonUserCheck = ({app}) => {
   const navigate = useNavigate();
   const displayName = userInfo.displayName
 
-    
+  const fetchUser = useCallback(async () => {
+    const userData = await ifUserInSessionGetUser();
+    setUserInfo(userData)
+  },[])
+
   
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         getIdToken(user).then((token) => { sessionStorage.setItem("__SESSION", token) })
         setLoggedInUser(true)
-        const signedInUser = await ifUserInSessionGetUser()
-        setUserInfo(await signedInUser)
+        fetchUser()
         navigate("/")
         } else {
         setLoggedInUser(false)
@@ -29,7 +32,7 @@ export const ShamazonUserCheck = ({app}) => {
         navigate("/")
         }
     })
-  },[auth])
+  },[auth, fetchUser])
   
   if (loggedInUser === true) {
     return <ShamazonLoggedInView
