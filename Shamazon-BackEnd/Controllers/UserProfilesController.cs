@@ -17,7 +17,7 @@ namespace Shamazon.Controllers
             _userProfilesRepository = userProfilesRepository;
         }
 
-        [Authorize, HttpGet("userprofile/{userId}")]
+        [HttpGet("userprofile/{userId}")]
         public IActionResult Get(int userId) 
         {
             var userProfile = _userProfilesRepository.GetUserProfile(userId);
@@ -27,34 +27,24 @@ namespace Shamazon.Controllers
             }
             return Ok(userProfile);
         }
-        [Authorize, HttpGet("userprofile/user/{userId}")]
-        public IActionResult GetUser(int userId)
-        {
-            var userProfile = _userProfilesRepository.GetFullUserProfile(userId);
-            if (userProfile == null)
-            {
-                return NotFound();
-            }
-            return Ok(userProfile);
-        }
-        [Authorize, HttpGet]
+        [HttpGet]
         public IActionResult GetLastId()
         {
             return Ok(_userProfilesRepository.GetLastUserProfileId());
         }
-        [Authorize, HttpPost]
+        [HttpPost]
         public IActionResult AddNewProfile(UserProfiles profile)
         {
             _userProfilesRepository.AddNewUserProfile(profile);
             return CreatedAtAction("GetLastId", new { id = profile.Id }, profile);
         }
-        [Authorize, HttpDelete]
+        [HttpDelete]
         public IActionResult DeleteProfile(int id)
         {
             _userProfilesRepository.DeleteUserProfile(id);
             return NoContent();
         }
-        [Authorize, HttpPut("{id}")]
+        [HttpPut("{id}")]
         public IActionResult UpdateUserProfile(UserProfiles profile, int id)
         {
             if(id != profile.Id)

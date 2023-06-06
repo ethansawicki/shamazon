@@ -1,16 +1,28 @@
 import { Button, Modal } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import "./modal.css"
+import { useCallback, useEffect, useState } from "react"
+import { getSpecificProduct } from "../fetchcalls/fetchCalls"
 
 
 
-export const SpecificProduct = ({productModalShow, setProductModalShow, product}) => {
+export const SpecificProduct = ({ productModalShow, setProductModalShow }) => {
+    const [specificProduct, setSpecificProduct] = useState({});
     const navigate = useNavigate();
-
+    const { productId } = useParams();
     const handleClose = () => {
         setProductModalShow(false)
         navigate("/products")    
     }
+
+    const fetchSpecificProduct = useCallback(async () => {
+        const product = await getSpecificProduct(productId)
+        setSpecificProduct(product)
+    },[productId])
+
+    useEffect(() => {
+        fetchSpecificProduct(productId)
+    },[fetchSpecificProduct, productModalShow])
 
     return (
         <Modal
@@ -19,10 +31,10 @@ export const SpecificProduct = ({productModalShow, setProductModalShow, product}
             dialogClassName="modal-90width"
         >
             <Modal.Header closeButton>
-                <Modal.Title>{ product.productName }</Modal.Title>
+                <Modal.Title>{ specificProduct.productName }</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {product.productDescription}
+                
             </Modal.Body>
             <Modal.Footer>
                 <Button>Add to cart</Button>

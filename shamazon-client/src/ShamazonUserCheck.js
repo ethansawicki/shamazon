@@ -3,7 +3,7 @@ import { ShamazonLoggedInView } from "./ShamazonLoggedInView";
 import { ShamazonVisitorView } from "./ShamazonVisitorView";
 import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { ifUserInSessionGetUser } from "./components/fetchcalls/fetchCalls";
+import { getUserProfileById } from "./components/fetchcalls/fetchCalls";
 
 
 export const ShamazonUserCheck = ({app}) => {
@@ -11,10 +11,9 @@ export const ShamazonUserCheck = ({app}) => {
   const [userInfo, setUserInfo] = useState({})
   const auth = getAuth(app);
   const navigate = useNavigate();
-  const displayName = userInfo.displayName
 
   const fetchUser = useCallback(async () => {
-    const userData = await ifUserInSessionGetUser();
+    const userData = await getUserProfileById();
     setUserInfo(userData)
   },[])
 
@@ -41,7 +40,6 @@ export const ShamazonUserCheck = ({app}) => {
       setUserInfo={setUserInfo}
       loggedInUser={loggedInUser}
       setLoggedInUser={setLoggedInUser}
-      displayName={displayName}
       navigate={navigate}
     />
   } else {

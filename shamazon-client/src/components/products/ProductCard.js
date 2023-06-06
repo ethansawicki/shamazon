@@ -1,10 +1,12 @@
 import { Button, Card } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
-import { SpecificProduct } from "./SpecificProduct"
 
-export const ProductCard = ({ product, productModalShow, setProductModalShow }) => {
+export const ProductCard = ({ product, setProductModalShow }) => {
     
-    const handleOpen = () => setProductModalShow(true)
+    const handleOpen = () => {
+        setProductModalShow(true)
+        
+    }
 
     return (
         <>
@@ -21,11 +23,10 @@ export const ProductCard = ({ product, productModalShow, setProductModalShow }) 
                             { product.productDescription }
                     </Card.Text>
                     <LinkContainer to={`/products/${product.id}`}>
-                        <Button size="md" onClick={handleOpen} variant="primary">View Product</Button>
+                        <Button size="md" onClick={() => { handleOpen() }} variant="link">View Product</Button>
                     </LinkContainer>
                     </Card.Body>
             </Card>
-            <SpecificProduct product={product} productModalShow={productModalShow} setProductModalShow={setProductModalShow} />
         </>
     )
 }

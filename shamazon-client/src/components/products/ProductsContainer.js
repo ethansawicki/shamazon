@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react"
-import { getProducts } from "../fetchcalls/fetchCalls"
+import { getProducts, getSpecificProduct } from "../fetchcalls/fetchCalls"
 import { Container, Stack } from "react-bootstrap"
 import { ProductCard } from "./ProductCard"
-import { useLocation } from "react-router-dom"
+import { Link, useLocation, useParams } from "react-router-dom"
+import { SpecificProduct } from "./SpecificProduct"
 
 
 export const ProductsContainer = () => {
     const [products, setProducts] = useState([])
     const [productModalShow, setProductModalShow] = useState(false);
     const location = useLocation();
+    
 
     const fetchProducts = useCallback(async () => {
         const productData = await getProducts();
@@ -20,11 +22,13 @@ export const ProductsContainer = () => {
     }, [fetchProducts])
     
     useEffect(() => {
-        if (location.pathname.includes(`${products.id}`)) {
-            setProductModalShow(location.pathname.includes(`${products.id}`))
+        if (location.pathname.includes(`products/${products.id}`)) {
+            setProductModalShow(location.pathname(`products/${products.id}`))
         }
-    },[location.pathname])
+    }, [location.pathname])
 
+    
+    console.log(location.pathname)
     return (
         <Container>
             <h3>Product Page</h3>
@@ -35,12 +39,12 @@ export const ProductsContainer = () => {
                             <ProductCard
                                 key={`product--${product.id}`}
                                 product={product}
-                                productModalShow={productModalShow}
                                 setProductModalShow={setProductModalShow}
                             /> 
                         )
                     })
-                }   
+                }
+                <SpecificProduct productModalShow={productModalShow} setProductModalShow={setProductModalShow} />
             </Stack>
         </Container>
     )

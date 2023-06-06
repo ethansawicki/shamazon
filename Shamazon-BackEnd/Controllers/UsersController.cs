@@ -72,5 +72,15 @@ namespace Shamazon.Controllers
         { 
             return Ok(_userRepository.GetLastUser());
         }
+        [Authorize, HttpGet("fulluser/{firebaseId}")]
+        public IActionResult GetUser(string firebaseId)
+        {
+            var userProfile = _userRepository.GetFullUserProfile(firebaseId);
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            return Ok(userProfile);
+        }
     }
 }

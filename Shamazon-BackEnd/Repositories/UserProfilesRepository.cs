@@ -15,7 +15,7 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT id, firstName, lastName, address
+                        SELECT id, userId, firstName, lastName, address, displayName
                         FROM UserProfile
                         WHERE userId = @userId";
 
@@ -29,63 +29,14 @@ namespace Shamazon.Repositories
                         profile = new UserProfiles()
                         {
                             Id = DbUtils.GetInt(reader, "id"),
+                            UserId = DbUtils.GetInt(reader, "userId"),
                             FirstName = DbUtils.GetString(reader, "firstName"),
                             LastName = DbUtils.GetString(reader, "lastName"),
-                            Address = DbUtils.GetString(reader, "address")
+                            Address = DbUtils.GetString(reader, "address"),
+                            DisplayName = DbUtils.GetString(reader, "displayName")
                         };
                     }
                     reader.Close();
-                    return profile;
-                }
-            }
-        }
-        public FullUser GetFullUserProfile(int userId)
-        {
-            using (var conn = Connection)
-            {
-                conn.Open();
-                using(var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                        SELECT 
-                            UP.id as UserProfileId,
-                            UP.userId,
-                            UP.firstName,
-                            UP.lastName,
-                            UP.address,
-                            U.id as UserId,
-                            U.email,
-                            U.firebaseId,
-                            U.displayName
-                        FROM UserProfile as UP
-                        JOIN Users as U ON UP.userId = U.id
-                        WHERE UP.userId = @userId";
-
-                    DbUtils.AddParameter(cmd, "@userId", userId);
-
-                    var reader = cmd.ExecuteReader();
-
-                    FullUser profile = new FullUser();
-
-                    if(reader.Read())
-                    {
-                        profile = new FullUser()
-                        {
-                            Id = DbUtils.GetInt(reader, "UserProfileId"),
-                            Email = DbUtils.GetString(reader, "email"),
-                            FirebaseId = DbUtils.GetString(reader, "firebaseId"),
-                            DisplayName = DbUtils.GetString(reader, "displayname"),
-                            UserProfile = new UserProfiles()
-                            {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                FirstName = DbUtils.GetString(reader, "firstName"),
-                                LastName = DbUtils.GetString(reader, "lastName"),
-                                Address = DbUtils.GetString(reader, "address")
-                            }
-                        };
-                    }
-                    reader.Close();
-
                     return profile;
                 }
             }
@@ -102,12 +53,15 @@ namespace Shamazon.Repositories
                             SET userId = @userid,
                                 firstName = @firstname,
                                 lastName = @lastname,
-                                address = @address
+                                address = @address,
+                                displayName = @displayName
                             WHERE userId = @userId";
 
                     DbUtils.AddParameter(cmd, "@userid", profile.UserId);
                     DbUtils.AddParameter(cmd, "@firstname", profile.FirstName);
                     DbUtils.AddParameter(cmd, "@lastname", profile.LastName);
+                    DbUtils.AddParameter(cmd, "@address", profile.Address);
+                    DbUtils.AddParameter(cmd, "@displayName", profile.DisplayName);
                     DbUtils.AddParameter(cmd, "@Id", id);
 
                     cmd.ExecuteNonQuery();
@@ -122,14 +76,15 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [UserProfile] ([userid],[firstName],[lastName],[address])
+                        INSERT INTO [UserProfile] ([userid],[firstName],[lastName],[address],[displayName])
                         OUTPUT INSERTED.ID
-                        VALUES (@userid, @firstname, @lastname, @address)";
+                        VALUES (@userid, @firstname, @lastname, @address, @displayName)";
 
                     DbUtils.AddParameter(cmd, "@userid", profile.UserId);
                     DbUtils.AddParameter(cmd, "@firstname", profile.FirstName);
                     DbUtils.AddParameter(cmd, "@lastname", profile.LastName);
                     DbUtils.AddParameter(cmd, "@address", profile.Address);
+                    DbUtils.AddParameter(cmd, "@displayName", profile.DisplayName);
 
                     profile.Id = (int)cmd.ExecuteScalar();
                 }
@@ -137,7 +92,7 @@ namespace Shamazon.Repositories
         }
         public LastUserProfileId GetLastUserProfileId()
         {
-            using(var conn = Connection)
+            using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
@@ -146,7 +101,7 @@ namespace Shamazon.Repositories
                         SELECT IDENT_CURRENT('UserProfile') as LastId";
                     var reader = cmd.ExecuteReader();
                     LastUserProfileId lastUserProfileId = new LastUserProfileId();
-                    if(DbUtils.IsNotNull(reader, "LastId"))
+                    if (DbUtils.IsNotNull(reader, "LastId"))
                     {
                         lastUserProfileId = new LastUserProfileId()
                         {
@@ -161,7 +116,7 @@ namespace Shamazon.Repositories
         }
         public void DeleteUserProfile(int id)
         {
-            using(var conn = Connection)
+            using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())

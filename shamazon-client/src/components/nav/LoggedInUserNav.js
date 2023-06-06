@@ -31,7 +31,7 @@ export const LoggedInUserNav = ({displayName, setLoggedInUser, userInfo}) => {
                                 </Popover.Body>
                             </Popover>
                         }>
-                    <Navbar.Text>Signed in as: <a href='#'>{ displayName }</a></Navbar.Text>
+                    <Navbar.Text className='col-xl-2'>Signed in as: <a href='#logout'>{ userInfo?.userProfile?.displayName }</a></Navbar.Text>
                     </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    

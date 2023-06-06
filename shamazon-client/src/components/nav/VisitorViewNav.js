@@ -28,6 +28,7 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                         <LinkContainer to='/search'><Nav.Link>Search</Nav.Link></LinkContainer>
+                        <LinkContainer to='/products'><Nav.Link>Products</Nav.Link></LinkContainer>
                             <NavDropdown title="Categories" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="#action/3.1">Category 1</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">

@@ -1,12 +1,15 @@
-import { Button, Container, Form } from "react-bootstrap"
+import { Button, Container, Form, Tab, Tabs } from "react-bootstrap"
 import { getUserProfileById } from "../fetchcalls/fetchCalls";
 import { useParams } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
+import { EditProfile } from "./AccountEditProfile";
+import { OrderHistory } from "./AccountOrderHistory";
 
 
 
 export const AccountUserProfile = () => {
     const [userProfile, setUserProfile] = useState({})
+    const [tab, setTab] = useState('AccountInfo')
     const { userId } = useParams();
 
     const fetchUserProfile = useCallback(async () => {
@@ -21,12 +24,19 @@ export const AccountUserProfile = () => {
     return (
         <Container>
             <h1>User Profile</h1>
-            <Form>
-                <Form.Control type="text" placeholder={userProfile.firstName} />
-                <Button></Button>
-                <Button></Button>
-                <Button></Button>
-            </Form>
+            <Tabs
+                id="fill-tab"
+                className="mb-3"
+                activeKey={tab}
+                onSelect={(k) => setTab(k)}
+                fill>
+                <Tab eventKey="AccountInfo" title="Account Info">
+                    <EditProfile userProfile={userProfile?.userProfile} />
+                </Tab>
+                <Tab eventKey="OrderHistory" title="Order History">
+                    <OrderHistory />
+                </Tab>
+            </Tabs>
         </Container>
     )
 }

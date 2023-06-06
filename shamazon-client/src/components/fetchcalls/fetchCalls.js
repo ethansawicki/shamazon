@@ -41,6 +41,23 @@ export const getProducts = async () => {
     }
 }
 
+export const getSpecificProduct = async (productId) => {
+    try {
+        const options = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        const request = await fetch(`${api}/Products/specificproduct/${productId}`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 export const addNewUser = async (registerUser, token, setUserInfo) => {
     try {
         const options = {
@@ -83,9 +100,10 @@ export const ifUserInSessionGetUser = async () => {
     }
 }
 
-export const getUserProfileById = async (userId) => {
+export const getUserProfileById = async () => {
     const auth = getAuth();
     const token = await auth.currentUser.getIdToken();
+    const user = auth.currentUser.uid
     try {
         const options = {
             method: "GET",
@@ -94,7 +112,7 @@ export const getUserProfileById = async (userId) => {
                 "Content-Type": "application/json"
             }
         }
-        const request = await fetch(`${api}/UserProfiles/userprofile/user/${userId}`, options)
+        const request = await fetch(`${api}/Users/fulluser/${user}`, options)
         const requestJSON = await request.json()
         const response = await requestJSON
         return response
