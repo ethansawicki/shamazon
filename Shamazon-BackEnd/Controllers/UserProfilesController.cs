@@ -44,15 +44,15 @@ namespace Shamazon.Controllers
             _userProfilesRepository.DeleteUserProfile(id);
             return NoContent();
         }
-        [HttpPut("{id}")]
+        [Authorize, HttpPut("{id}")]
         public IActionResult UpdateUserProfile(UserProfiles profile, int id)
         {
-            if(id != profile.Id)
+            if(id != profile.UserId)
             {
                 return BadRequest();
             }
             _userProfilesRepository.UpdateUserProfile(profile, id);
-            return NoContent();
+            return Ok();
         }
     }
 }

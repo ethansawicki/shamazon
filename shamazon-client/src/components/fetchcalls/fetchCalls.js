@@ -78,7 +78,6 @@ export const addNewUser = async (registerUser, token, setUserInfo) => {
     }
 }
 
-
 export const ifUserInSessionGetUser = async () => {
     const auth = getAuth();
     const token = await auth.currentUser.getIdToken();
@@ -114,9 +113,30 @@ export const getUserProfileById = async () => {
         }
         const request = await fetch(`${api}/Users/fulluser/${user}`, options)
         const requestJSON = await request.json()
-        const response = await requestJSON
+        const response = requestJSON
         return response
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const updateProfile = async (userObj) => {
+    const auth = getAuth();
+    const token = await auth.currentUser.getIdToken();
+    try {
+        const options = {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userObj)
+        }
+        const request = await fetch(`${api}/UserProfiles/${userObj.userId}`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (err) {
+        console.error(err)
     }
 }

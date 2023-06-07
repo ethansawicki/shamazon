@@ -33,7 +33,7 @@ export const logout = (setLoggedInUser) => {
     } 
 }
 
-export const registerWithEmail = async (registerUser, setLoggedInUser, setUserInfo, setOpenError) => {
+export const registerWithEmail = async (registerUser, setUserInfo, setOpenError) => {
     const auth = getAuth();
     const userAuth = {}
      try {
@@ -45,7 +45,6 @@ export const registerWithEmail = async (registerUser, setLoggedInUser, setUserIn
             try {
                 await userCheck(auth.currentUser.uid, token)
                 await addNewUser(userAuth, token, setUserInfo)
-                setLoggedInUser(true)
             } catch (error) {
                 console.error(error)
             }

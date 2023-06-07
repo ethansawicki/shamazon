@@ -31,7 +31,7 @@ export const AccountUserProfile = () => {
                 onSelect={(k) => setTab(k)}
                 fill>
                 <Tab eventKey="AccountInfo" title="Account Info">
-                    <EditProfile userProfile={userProfile?.userProfile} />
+                    <EditProfile userProfile={userProfile} />
                 </Tab>
                 <Tab eventKey="OrderHistory" title="Order History">
                     <OrderHistory />
