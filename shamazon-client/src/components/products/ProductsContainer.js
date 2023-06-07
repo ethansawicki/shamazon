@@ -8,7 +8,9 @@ import { SpecificProduct } from "./SpecificProduct"
 
 export const ProductsContainer = () => {
     const [products, setProducts] = useState([])
+    const [filteredProducts, setFilteredProducts] = useState()
     const [productModalShow, setProductModalShow] = useState(false);
+    const { productId } = useParams();
     const location = useLocation();
     
 
@@ -27,8 +29,14 @@ export const ProductsContainer = () => {
         }
     }, [location.pathname])
 
+    useEffect(() => {
+        const singleProduct = products.find((product) => {
+            return product.id === Number(productId)
+        })
+        setFilteredProducts(singleProduct)
+    }, [productId])
     
-    console.log(location.pathname)
+    console.log(productId)
     return (
         <Container>
             <h3>Product Page</h3>
@@ -44,7 +52,7 @@ export const ProductsContainer = () => {
                         )
                     })
                 }
-                <SpecificProduct productModalShow={productModalShow} setProductModalShow={setProductModalShow} />
+                <SpecificProduct filteredProducts={filteredProducts} productModalShow={productModalShow} setProductModalShow={setProductModalShow} />
             </Stack>
         </Container>
     )
