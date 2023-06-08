@@ -7,7 +7,7 @@ export const AccountContainer = ({userInfo}) => {
     
     return (
         <LinkContainer to={`/account/${userInfo.id}`}>
-            <AccountUserProfile />
+            <AccountUserProfile userInfo={userInfo} />
         </LinkContainer>
     )
 }

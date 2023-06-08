@@ -5,7 +5,7 @@ import { useState } from "react"
 import { LoginContainer } from "./components/auth/LoginContainer"
 import { Register } from "./components/auth/Register"
 
-export const ShamazonVisitorView = ({auth, setLoggedInUser, loggedInUser, setUserInfo}) => {
+export const ShamazonVisitorView = ({auth, setLoggedInUser, userInfo, loggedInUser, setUserInfo}) => {
     const [modalOpen, setModalOpen] = useState(false)
     const [openError, setOpenError] = useState(false)
     const [registerModalOpen, setRegisterModalOpen] = useState(false)
@@ -25,6 +25,7 @@ export const ShamazonVisitorView = ({auth, setLoggedInUser, loggedInUser, setUse
                         />
                         <Register
                             setUserInfo={setUserInfo}
+                            userInfo={userInfo}
                             registerModalOpen={registerModalOpen}
                             setRegisterModalOpen={setRegisterModalOpen}
                             setLoggedInUser={setLoggedInUser}

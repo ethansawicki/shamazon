@@ -1,5 +1,5 @@
-import { Button, Container, Form, Tab, Tabs } from "react-bootstrap"
-import { getUserProfileById } from "../fetchcalls/fetchCalls";
+import { CardGroup, Container, Tab, Tabs } from "react-bootstrap"
+import { getUserOrderHistory } from "../fetchcalls/fetchCalls";
 import { useParams } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
 import { EditProfile } from "./AccountEditProfile";
@@ -7,19 +7,31 @@ import { OrderHistory } from "./AccountOrderHistory";
 
 
 
-export const AccountUserProfile = () => {
-    const [userProfile, setUserProfile] = useState({})
+export const AccountUserProfile = ({userInfo}) => {
+    const [totalUserPurchases, setTotalUserPurchases] = useState([])
+    const [purchases, setPurchases] = useState([])
     const [tab, setTab] = useState('AccountInfo')
+    const [editMode, setEditMode] = useState(false)
     const { userId } = useParams();
-
-    const fetchUserProfile = useCallback(async () => {
-        const userProfile = await getUserProfileById(userId);
-        setUserProfile(await userProfile)
-    },[])
     
+    const fetchUserPurchases = useCallback(async (userId) => {
+        const userPurchases = await getUserOrderHistory(userId);
+        setTotalUserPurchases(userPurchases)
+    },[])
+
     useEffect(() => {
-        fetchUserProfile(userId)
-    }, [fetchUserProfile, userId])
+        fetchUserPurchases(userId)
+    },[fetchUserPurchases, userId])
+
+    const tabSelect = (k) => {
+        setTab(k)
+        setEditMode(false)
+    }
+
+    useEffect(() => {
+        const morePurchases = totalUserPurchases.map((purchase) => setPurchases(purchase.orderItem))
+    },[fetchUserPurchases, totalUserPurchases])
+
 
     return (
         <Container>
@@ -28,13 +40,21 @@ export const AccountUserProfile = () => {
                 id="fill-tab"
                 className="mb-3"
                 activeKey={tab}
-                onSelect={(k) => setTab(k)}
+                onSelect={(k) => tabSelect(k)}
                 fill>
                 <Tab eventKey="AccountInfo" title="Account Info">
-                    <EditProfile userProfile={userProfile} />
+                    <EditProfile editMode={editMode} setEditMode={setEditMode} userInfo={userInfo} />
                 </Tab>
                 <Tab eventKey="OrderHistory" title="Order History">
-                    <OrderHistory />
+                    {
+                        // purchases.map((purchase) => {
+                        //     return (
+                        //         <CardGroup key={purchase.orderItemId}>
+                        //             <OrderHistory purchase={purchase} />
+                        //         </CardGroup>
+                        //     )
+                        // })
+                    }
                 </Tab>
             </Tabs>
         </Container>

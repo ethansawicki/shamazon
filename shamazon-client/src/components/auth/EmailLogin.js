@@ -7,7 +7,7 @@ import { ErrorAlert } from "./AlertPrompt"
 
 
 
-export const LoginWithEmail = ({setLoggedInUser, modalOpen, setModalOpen, openError, setOpenError}) => {
+export const LoginWithEmail = ({setLoggedInUser, modalOpen, setModalOpen, setUserInfo, openError, setOpenError}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
@@ -16,7 +16,7 @@ export const LoginWithEmail = ({setLoggedInUser, modalOpen, setModalOpen, openEr
         setOpenError(false)
     }
     const handleLogin = async () => {
-      await logInWithEmail(email, password, navigate, setLoggedInUser, openError, setOpenError)
+      await logInWithEmail(email, password, navigate, setLoggedInUser, openError, setOpenError, setUserInfo)
     }
 
     return (

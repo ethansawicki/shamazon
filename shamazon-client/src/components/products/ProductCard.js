@@ -21,10 +21,10 @@ export const ProductCard = ({ product, setProductModalShow }) => {
                         </Card.Subtitle>
                         <Card.Text>
                             { product.productDescription }
-                    </Card.Text>
-                    <LinkContainer to={`/products/${product.id}`}>
-                        <Button size="md" onClick={() => { handleOpen() }} variant="link">View Product</Button>
-                    </LinkContainer>
+                        </Card.Text>
+                        <LinkContainer to={`/products/${product.id}`}>
+                            <Button size="md" onClick={() => { handleOpen() }} variant="link">View Product</Button>
+                        </LinkContainer>
                     </Card.Body>
             </Card>
         </>

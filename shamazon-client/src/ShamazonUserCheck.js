@@ -8,31 +8,30 @@ import { getUserProfileById } from "./components/fetchcalls/fetchCalls";
 
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState()
   const auth = getAuth(app);
   const navigate = useNavigate();
 
-  const fetchUser = useCallback(async () => {
-    const userData = await getUserProfileById();
+  const fetchUser = useCallback(async (token, uid) => {
+      const userData = await getUserProfileById(token, uid);
     setUserInfo(userData)
+    setLoggedInUser(true)
   },[])
 
-  
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        getIdToken(user).then((token) => { sessionStorage.setItem("__SESSION", token) })
-        setLoggedInUser(true)
-        fetchUser()
-        navigate("/")
-        } else {
+        const token = await user.getIdToken()
+        const uid = auth.currentUser.uid
+        fetchUser(token, uid)
+      } else {
         setLoggedInUser(false)
         setUserInfo({})
         navigate("/")
-        }
+      }
     })
-  },[auth, fetchUser])
-  
+  },[fetchUser, auth])
+
   if (loggedInUser === true) {
     return <ShamazonLoggedInView
       auth={auth}
@@ -45,6 +44,7 @@ export const ShamazonUserCheck = ({app}) => {
   } else {
     return <ShamazonVisitorView
       auth={auth}
+      userInfo={userInfo}
       setUserInfo={setUserInfo}
       loggedInUser={loggedInUser}
       setLoggedInUser={setLoggedInUser}

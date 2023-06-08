@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react"
-import { Button, Container, Form, Row, Stack } from "react-bootstrap"
+import { Button, Container, Form, Stack } from "react-bootstrap"
 import { updateProfile } from "../fetchcalls/fetchCalls"
 
 
-export const EditProfile = ({ userProfile }) => {
-    const [editUser, setEditUser] = useState()
-    const [editMode, setEditMode] = useState(false)
+export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
+    const [userProfile, setUserProfile] = useState()
+    
 
     const handleClick = async () => {
         setEditMode(true)
     }
 
     useEffect(() => {
-        setEditUser(userProfile.userProfile)
-    }, [userProfile])
+        setUserProfile(userInfo?.userProfile)
+    }, [userInfo])
 
     const handleChange = (e) => {
-        const copy = { ...editUser }
+        const copy = { ...userProfile }
         copy[e.target.id] = e.target.value
-        setEditUser(copy)
+        setUserProfile(copy)
     }
     
     const handleUpdate = async () => {
-        await updateProfile(editUser)
+        await updateProfile(userProfile)
         setEditMode(false)
     }
 
@@ -35,38 +35,38 @@ export const EditProfile = ({ userProfile }) => {
                         <Form className="col-md-5 mx-auto" >
                             <Form.Group className="mb-3" controlId="firstName">
                                 <Form.Label>First Name</Form.Label>
-                                <Form.Control  type="input" value={editUser?.firstName || ""} disabled></Form.Control>
+                                <Form.Control  type="input" value={userProfile?.firstName || ""} disabled></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="lastName">
                                 <Form.Label>Last Name</Form.Label>
-                                <Form.Control type="input" value={editUser?.lastName || ""} disabled></Form.Control>
+                                <Form.Control type="input" value={userProfile?.lastName || ""} disabled></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="address">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control type="input" value={editUser?.address || ""} disabled></Form.Control>
+                                <Form.Control type="input" value={userProfile?.address || ""} disabled></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="displayName">
                                 <Form.Label>Display Name</Form.Label>
-                                <Form.Control type="input" value={editUser?.displayName || ""} disabled></Form.Control>
+                                <Form.Control type="input" value={userProfile?.displayName || ""} disabled></Form.Control>
                             </Form.Group>
                         </Form>
                         :
                         <Form className="col-md-5 mx-auto" >
                             <Form.Group className="mb-3" controlId="firstName">
                                 <Form.Label>First Name</Form.Label>
-                                <Form.Control type="input" value={editUser?.firstName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
+                                <Form.Control type="input" value={userProfile?.firstName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="lastName">
                                 <Form.Label>Last Name</Form.Label>
-                                <Form.Control type="input" value={editUser?.lastName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
+                                <Form.Control type="input" value={userProfile?.lastName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="address">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control type="input" value={editUser?.address || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
+                                <Form.Control type="input" value={userProfile?.address || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="displayName">
                                 <Form.Label>Display Name</Form.Label>
-                                <Form.Control type="input" value={editUser?.displayName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
+                                <Form.Control type="input" value={userProfile?.displayName || ""} onChange={(e) => {handleChange(e)}} ></Form.Control>
                             </Form.Group>
                         </Form>
                 }

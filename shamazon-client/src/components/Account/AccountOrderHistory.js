@@ -1,9 +1,10 @@
+import { Card, CardGroup, Container } from "react-bootstrap"
 
 
-export const OrderHistory = () => {
+export const OrderHistory = ({purchase}) => {
     return (
-        <>
-            <h3>OrderHistory</h3>
-        </>
+        <Card>
+            <Card.Img variant="top" />
+        </Card>
     )
 }

@@ -9,8 +9,8 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
             return await signInWithEmailAndPassword(auth, email, password);    
         }).then(async () => {
             const token = await auth.currentUser.getIdToken()
-            await ifUserInSessionGetUser(auth.currentUser.uid, token)
-            if (ifUserInSessionGetUser) {
+            const user = await ifUserInSessionGetUser(auth.currentUser.uid, token)
+            if (user) {
                 setLoggedInUser(true)
                 navigate("/")
             }
@@ -33,18 +33,18 @@ export const logout = (setLoggedInUser) => {
     } 
 }
 
-export const registerWithEmail = async (registerUser, setUserInfo, setOpenError) => {
+export const registerWithEmail = async (registerUser, setUserInfo, setOpenError , registerUserProfile) => {
     const auth = getAuth();
     const userAuth = {}
+    let token = ""
      try {
         await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password).then(async (userCred) => {
             userAuth.email = userCred.user.email;
             userAuth.firebaseId = userCred.user.uid;
-            userAuth.displayName = registerUser.displayName
-            const token = await auth.currentUser.getIdToken()
+            token = await auth.currentUser.getIdToken()
             try {
                 await userCheck(auth.currentUser.uid, token)
-                await addNewUser(userAuth, token, setUserInfo)
+                await addNewUser(userAuth, token, setUserInfo, registerUserProfile)
             } catch (error) {
                 console.error(error)
             }
@@ -55,4 +55,5 @@ export const registerWithEmail = async (registerUser, setUserInfo, setOpenError)
          signOut(auth)
          sessionStorage.removeItem("__SESSION")
     }
+    
 }

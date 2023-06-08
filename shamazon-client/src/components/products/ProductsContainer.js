@@ -36,7 +36,6 @@ export const ProductsContainer = () => {
         setFilteredProducts(singleProduct)
     }, [productId])
     
-    console.log(productId)
     return (
         <Container>
             <h3>Product Page</h3>

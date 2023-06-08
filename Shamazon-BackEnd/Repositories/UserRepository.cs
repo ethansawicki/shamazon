@@ -118,11 +118,12 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Users] ([firebaseId])
+                        INSERT INTO [Users] ([firebaseId],[email])
                         OUTPUT INSERTED.ID
-                        VALUES (@firebaseId)";
+                        VALUES (@firebaseId, @email)";
 
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
+                    DbUtils.AddParameter(cmd, "@email", user.Email);
 
                     user.Id = (int)cmd.ExecuteScalar();
                 }
