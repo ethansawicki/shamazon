@@ -1,36 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ShamazonLoggedInView } from "./ShamazonLoggedInView";
 import { ShamazonVisitorView } from "./ShamazonVisitorView";
 import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { ifUserInSessionGetUser } from "./components/fetchcalls/fetchCalls";
+import { getUserProfileById } from "./components/fetchcalls/fetchCalls";
 
 
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState()
   const auth = getAuth(app);
   const navigate = useNavigate();
-  const displayName = userInfo.displayName
 
-    
-  
+  const fetchUser = useCallback(async (token, uid) => {
+      const userData = await getUserProfileById(token, uid);
+    setUserInfo(userData)
+    setLoggedInUser(true)
+  },[])
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        getIdToken(user).then((token) => { sessionStorage.setItem("__SESSION", token) })
-        setLoggedInUser(true)
-        const signedInUser = await ifUserInSessionGetUser()
-        setUserInfo(await signedInUser)
-        navigate("/")
-        } else {
+        const token = await user.getIdToken()
+        const uid = auth.currentUser.uid
+        fetchUser(token, uid)
+      } else {
         setLoggedInUser(false)
         setUserInfo({})
         navigate("/")
-        }
+      }
     })
-  },[auth])
-  
+  },[fetchUser, auth])
+
   if (loggedInUser === true) {
     return <ShamazonLoggedInView
       auth={auth}
@@ -38,11 +39,12 @@ export const ShamazonUserCheck = ({app}) => {
       setUserInfo={setUserInfo}
       loggedInUser={loggedInUser}
       setLoggedInUser={setLoggedInUser}
-      displayName={displayName}
+      navigate={navigate}
     />
   } else {
     return <ShamazonVisitorView
       auth={auth}
+      userInfo={userInfo}
       setUserInfo={setUserInfo}
       loggedInUser={loggedInUser}
       setLoggedInUser={setLoggedInUser}

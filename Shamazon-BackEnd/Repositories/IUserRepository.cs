@@ -4,13 +4,12 @@ namespace Shamazon.Repositories
 {
     public interface IUserRepository
     {
+        void AddNewUser(Users user);
         void DeleteAccount(int id);
+        Users FindUserByFirebaseId(string firebaseId);
+        FullUser GetFullUserProfile(string firebaseId);
+        LastUserId GetLastUser();
         UserCheck GetUserByFirebaseId(string firebaseId);
         void UpdateUser(Users user);
-
-        void AddNewUser(Users user);
-
-        LastUserId GetLastUser();
-        FindUser FindUserByFirebaseId(string firebaseId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shamazon.Models;
 using Shamazon.Repositories;
 
 namespace Shamazon.Controllers
@@ -16,7 +17,7 @@ namespace Shamazon.Controllers
             _userProfilesRepository = userProfilesRepository;
         }
 
-        [Authorize, HttpGet("userprofile/{userId}")]
+        [HttpGet("userprofile/{userId}")]
         public IActionResult Get(int userId) 
         {
             var userProfile = _userProfilesRepository.GetUserProfile(userId);
@@ -25,6 +26,33 @@ namespace Shamazon.Controllers
                 return NotFound();
             }
             return Ok(userProfile);
+        }
+        [HttpGet]
+        public IActionResult GetLastId()
+        {
+            return Ok(_userProfilesRepository.GetLastUserProfileId());
+        }
+        [HttpPost]
+        public IActionResult AddNewProfile(UserProfiles profile)
+        {
+            _userProfilesRepository.AddNewUserProfile(profile);
+            return CreatedAtAction("GetLastId", new { id = profile.Id }, profile);
+        }
+        [HttpDelete]
+        public IActionResult DeleteProfile(int id)
+        {
+            _userProfilesRepository.DeleteUserProfile(id);
+            return NoContent();
+        }
+        [Authorize, HttpPut("{id}")]
+        public IActionResult UpdateUserProfile(UserProfiles profile, int id)
+        {
+            if(id != profile.UserId)
+            {
+                return BadRequest();
+            }
+            _userProfilesRepository.UpdateUserProfile(profile, id);
+            return Ok();
         }
     }
 }

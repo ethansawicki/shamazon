@@ -60,15 +60,15 @@ CREATE TABLE [UserProfile](
 	[userId] int,
 	[firstName] nvarchar(255),
 	[lastName] nvarchar(255),
-	[address] nvarchar(255)
+	[address] nvarchar(255),
+	[displayName] nvarchar(255)
 )
 GO
 
 CREATE TABLE [Users] (
 	[id] int PRIMARY KEY IDENTITY NOT NULL,
-	[email] nvarchar(255),
 	[firebaseId] nvarchar(255),
-	[displayName] nvarchar(255),
+	[email] nvarchar(255)
 )
 GO
 
@@ -90,9 +90,13 @@ GO
 ALTER TABLE [Products] ADD FOREIGN KEY ([productCategoryId]) REFERENCES [productCategory] ([id])
 GO
 
-INSERT INTO dbo.[Users]([email],[firebaseid],[displayName]) VALUES ('FakeEmail@fake.com','C2IKGQgCCfgR5aljv0nXLxu7WQi2','TestUser')
+INSERT INTO dbo.[Users]([firebaseid], [email]) VALUES ('C2IKGQgCCfgR5aljv0nXLxu7WQi2','FakeEmail@fake.com')
 
-INSERT INTO dbo.[UserProfile]([userId],[firstName],[lastName],[address]) VALUES (1,'Fake','User','1234 Fake Way')
+INSERT INTO dbo.[Users]([firebaseid], [email]) VALUES ('hi5MvSPW8tbORuiLQ96L3giqEXg1','test@test.com')
+
+INSERT INTO dbo.[UserProfile]([userId],[firstName],[lastName],[address], [displayName]) VALUES (2,'Test','User','1234 Fake Way','TestUser')
+
+INSERT INTO dbo.[UserProfile]([userId],[firstName],[lastName],[address], [displayName]) VALUES (1,'Fake','User','1235 Fake Way', 'FakeUser')
 
 INSERT INTO dbo.[productCategory]([categoryName]) VALUES ('PC Components')
 

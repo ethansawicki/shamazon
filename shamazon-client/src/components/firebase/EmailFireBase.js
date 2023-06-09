@@ -1,5 +1,5 @@
 import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { addNewUser, userCheck } from "../fetchcalls/fetchCalls";
+import { addNewUser, ifUserInSessionGetUser, userCheck } from "../fetchcalls/fetchCalls";
 
 
 export const logInWithEmail = async (email, password, navigate, setLoggedInUser, setOpenError) => {
@@ -9,8 +9,8 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
             return await signInWithEmailAndPassword(auth, email, password);    
         }).then(async () => {
             const token = await auth.currentUser.getIdToken()
-            await userCheck(auth.currentUser.uid, token)
-            if (userCheck) {
+            const user = await ifUserInSessionGetUser(auth.currentUser.uid, token)
+            if (user) {
                 setLoggedInUser(true)
                 navigate("/")
             }
@@ -22,38 +22,37 @@ export const logInWithEmail = async (email, password, navigate, setLoggedInUser,
     }
 }
 
-export const logout = (setLoggedInUser, navigate) => {
+export const logout = (setLoggedInUser) => {
     const auth = getAuth();
     try { 
         signOut(auth)  
         setLoggedInUser(false)
         sessionStorage.removeItem("__SESSION")
-        navigate("/")
     } catch (err) {
         console.error(err)
     } 
 }
 
-export const registerWithEmail = async (registerUser, setLoggedInUser, setUserInfo) => {
+export const registerWithEmail = async (registerUser, setUserInfo, setOpenError , registerUserProfile) => {
     const auth = getAuth();
     const userAuth = {}
+    let token = ""
      try {
         await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password).then(async (userCred) => {
             userAuth.email = userCred.user.email;
             userAuth.firebaseId = userCred.user.uid;
-            userAuth.displayName = registerUser.displayName
-            const token = await auth.currentUser.getIdToken()
+            token = await auth.currentUser.getIdToken()
             try {
-                await userCheck(auth.currentUser.uid, token)
-                await addNewUser(userAuth, token, setUserInfo)
-                setLoggedInUser(true)
+                await addNewUser(userAuth, token, setUserInfo, registerUserProfile)
             } catch (error) {
                 console.error(error)
             }
         })
     } catch (error) {
          console.error(error)
+         setOpenError(true)
          signOut(auth)
          sessionStorage.removeItem("__SESSION")
     }
+    
 }

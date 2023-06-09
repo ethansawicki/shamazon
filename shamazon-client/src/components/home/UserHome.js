@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap"
 
 
-export const VisitorHome = () => {
+export const UserHome = () => {
     return (
         <Container>
-            <h3>VisitorHome</h3>
+            <h3>Shamazon User Home</h3>
         </Container>
     )
 }

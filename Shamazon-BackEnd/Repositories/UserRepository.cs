@@ -16,7 +16,7 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        select id, firebaseId FROM Users
+                        select id, firebaseId, email FROM Users
                         WHERE firebaseId = @firebaseId";
 
                     DbUtils.AddParameter(cmd, "@firebaseId", firebaseId);
@@ -30,7 +30,8 @@ namespace Shamazon.Repositories
                         userCheck = new UserCheck()
                         {
                             Id = DbUtils.GetInt(reader, "id"),
-                            FirebaseId = DbUtils.GetString(reader, "firebaseId")
+                            FirebaseId = DbUtils.GetString(reader, "firebaseId"),
+                            Email = DbUtils.GetString(reader, "email")
                         };
                     }
 
@@ -40,7 +41,7 @@ namespace Shamazon.Repositories
                 }
             }
         }
-        public FindUser FindUserByFirebaseId(string firebaseId)
+        public Users FindUserByFirebaseId(string firebaseId)
         {
             using (var conn = Connection)
             {
@@ -48,22 +49,21 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        select id, firebaseId, displayName, email FROM Users
+                        select id, firebaseId, email FROM Users
                         WHERE firebaseId = @firebaseId";
 
                     DbUtils.AddParameter(cmd, "@firebaseId", firebaseId);
 
                     var reader = cmd.ExecuteReader();
 
-                    FindUser findUser = new FindUser();
+                    Users findUser = new Users();
 
                     if (reader.Read())
                     {
-                        findUser = new FindUser()
+                        findUser = new Users()
                         {
                             Id = DbUtils.GetInt(reader, "id"),
                             FirebaseId = DbUtils.GetString(reader, "firebaseId"),
-                            DisplayName = DbUtils.GetString(reader, "displayName"),
                             Email = DbUtils.GetString(reader, "email")
                         };
                     }
@@ -84,17 +84,13 @@ namespace Shamazon.Repositories
                     cmd.CommandText = @"
                         UPDATE Users
                             SET Email = @email,
-                                firstName = @firstName,
-                                lastName = @lastName,
                                 displayName = @displayName,
-                                Address = @address,
                                 firebaseId = @firebaseId
                         WHERE id = @Id";
 
-                    DbUtils.AddParameter(cmd, "@email", user.Email);
-                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
                     DbUtils.AddParameter(cmd, "@Id", user.Id);
+                    DbUtils.AddParameter(cmd, "@email", user.Email);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -122,13 +118,12 @@ namespace Shamazon.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Users] ([email],[firebaseId],[displayName])
+                        INSERT INTO [Users] ([firebaseId],[email])
                         OUTPUT INSERTED.ID
-                        VALUES (@email, @firebaseId, @displayName)";
+                        VALUES (@firebaseId, @email)";
 
-                    DbUtils.AddParameter(cmd, "@email", user.Email);
                     DbUtils.AddParameter(cmd, "@firebaseId", user.FirebaseId);
-                    DbUtils.AddParameter(cmd, "@displayName", user.DisplayName);
+                    DbUtils.AddParameter(cmd, "@email", user.Email);
 
                     user.Id = (int)cmd.ExecuteScalar();
                 }
@@ -138,7 +133,7 @@ namespace Shamazon.Repositories
         {
             using (var conn = Connection)
             {
-                conn.Open ();
+                conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
@@ -146,16 +141,68 @@ namespace Shamazon.Repositories
 
                     var reader = cmd.ExecuteReader();
                     LastUserId lastUserId = new LastUserId();
-                   if(DbUtils.IsNotNull(reader, "LastUSERId"))
+                    if (DbUtils.IsNotNull(reader, "LastUSERId"))
                     {
                         lastUserId = new LastUserId()
                         {
                             Id = DbUtils.GetInt(reader, "LastUserId"),
                         };
                     }
-                   reader.Close();
+                    reader.Close();
 
                     return lastUserId;
+                }
+            }
+        }
+        public FullUser GetFullUserProfile(string firebaseId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT 
+                            U.id as UserId,
+                            U.firebaseId,
+                            U.email,
+                            UP.id as UserProfileId,
+                            UP.userId as userprofId,
+                            UP.firstName,
+                            UP.lastName,
+                            UP.displayName,
+                            UP.address
+                        FROM Users as U
+                        JOIN UserProfile as UP ON UP.userId = U.id
+                        WHERE U.firebaseId = @firebaseId";
+
+                    DbUtils.AddParameter(cmd, "@firebaseId", firebaseId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    FullUser profile = new FullUser();
+
+                    if (reader.Read())
+                    {
+                        profile = new FullUser()
+                        {
+                            Id = DbUtils.GetInt(reader, "UserId"),
+                            FirebaseId = DbUtils.GetString(reader, "firebaseId"),
+                            Email = DbUtils.GetString(reader, "email"),
+                            UserProfile = new UserProfiles()
+                            {
+                                Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                DisplayName = DbUtils.GetString(reader, "displayname"),
+                                UserId = DbUtils.GetInt(reader, "userprofId"),
+                                FirstName = DbUtils.GetString(reader, "firstName"),
+                                LastName = DbUtils.GetString(reader, "lastName"),
+                                Address = DbUtils.GetString(reader, "address")
+                            }
+                        };
+                    }
+                    reader.Close();
+
+                    return profile;
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace Shamazon.Controllers
             var user = _userRepository.GetUserByFirebaseId(firebaseId);
             if (user == null)
             {
-                return NotFound();
+                return Ok("User doesnt Exist");
             } 
             else if(firebaseId == user.FirebaseId)
             {
@@ -71,6 +71,16 @@ namespace Shamazon.Controllers
         public IActionResult GetLastUserId() 
         { 
             return Ok(_userRepository.GetLastUser());
+        }
+        [Authorize, HttpGet("fulluser/{firebaseId}")]
+        public IActionResult GetUser(string firebaseId)
+        {
+            var userProfile = _userRepository.GetFullUserProfile(firebaseId);
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+            return Ok(userProfile);
         }
     }
 }

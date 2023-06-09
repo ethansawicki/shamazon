@@ -1,22 +1,23 @@
-import { Navigate, Route, Routes } from "react-router-dom"
-import { LoggedInHome } from "../home/LoggedInHome"
-import { AccountComponent } from "../Account/Account"
+import { Navigate, Route, Routes, Outlet } from "react-router-dom"
 import { SearchComponent } from "../search/Search"
+import { ProductsContainer } from "../products/ProductsContainer"
+import { UserHome } from "../home/UserHome"
+import { AccountContainer } from "../Account/AccountContainer"
 
-export const LoggedInView = ({ setLoggedInUser, loggedInUser, userInfo, setUserInfo }) => {
+export const LoggedInView = ({ userInfo }) => {
     
     return (
         <Routes>
-            <Route path="/" element={<Navigate replace to={`/userhome`} />} />
-            <Route path="userhome" element={<LoggedInHome />}
-             />
+            <Route path="/" element={
+                    <UserHome />
+            } />
             <Route path="account" element={
-                <AccountComponent
-                    setLoggedInUser={setLoggedInUser}
-                    userInfo={userInfo}
-                    setUserInfo={setUserInfo}
-                    loggedInUser={loggedInUser} />} />
+                <AccountContainer userInfo={userInfo} />    
+            } />
+            <Route path="account/:userId" element={<AccountContainer userInfo={userInfo} />} />
             <Route path="search" element={<SearchComponent />} />
+            <Route path="products" element={<ProductsContainer />} />
+            <Route path="products/:productId" element={<ProductsContainer />} />
             <Route path="login" element={<Navigate to={`/userhome`} />} />
         </Routes>
     )
