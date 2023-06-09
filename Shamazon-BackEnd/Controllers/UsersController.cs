@@ -51,8 +51,8 @@ namespace Shamazon.Controllers
             _userRepository.AddNewUser(user);
             return CreatedAtAction("GetLastUserId", new { id = user.Id }, user);
         }
-        [HttpDelete]
-        public IActionResult DeleteUser(int id) 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id) 
         {
             _userRepository.DeleteAccount(id);
             return NoContent();

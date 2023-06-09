@@ -5,7 +5,7 @@ namespace Shamazon.Repositories
     public interface IUserRepository
     {
         void AddNewUser(Users user);
-        void DeleteAccount(int id);
+        void DeleteAccount(string id);
         Users FindUserByFirebaseId(string firebaseId);
         FullUser GetFullUserProfile(string firebaseId);
         LastUserId GetLastUser();

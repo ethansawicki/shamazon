@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import { Button, Container, Form, Stack } from "react-bootstrap"
-import { updateProfile } from "../fetchcalls/fetchCalls"
+import { Button, Container, Form, Modal, ModalBody, ModalTitle, Stack } from "react-bootstrap"
+import { deleteDBUser, deleteUserProfile, updateProfile } from "../fetchcalls/fetchCalls"
+import { deleteUser, getAuth, signOut } from "firebase/auth"
 
 
 export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
     const [userProfile, setUserProfile] = useState()
-    
+    const [openDeleteModal, setOpenDeleteModal] = useState(false) 
 
     const handleClick = async () => {
         setEditMode(true)
@@ -24,6 +25,27 @@ export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
     const handleUpdate = async () => {
         await updateProfile(userProfile)
         setEditMode(false)
+    }
+
+    const handleOpenModal = () => {
+        setOpenDeleteModal(true)
+    }
+
+    const handleCloseModal = () => {
+        setOpenDeleteModal(false)
+    }
+
+    const handleDeleteAccount = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser
+        await deleteUserProfile(userProfile.id)
+        await deleteDBUser(userInfo.firebaseId)
+        deleteUser(user).then(() => {
+            console.log('user deleted')
+            signOut(auth)
+        }).catch((error) => {
+            console.error(error)
+        })
     }
 
     return (
@@ -78,8 +100,24 @@ export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
                         :
                     <Button variant="primary" onClick={handleUpdate}>Save</Button>
                 }
-                <Button variant="danger">Delete Account</Button>
+                <Button variant="danger" onClick={handleOpenModal}>Delete Account</Button>
             </Stack>
+            <Modal
+                show={openDeleteModal}
+                onHide={handleCloseModal}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>ACCOUNT DELETE?</Modal.Title>
+                </Modal.Header>
+                <ModalBody>
+                    ARE YOU SURE YOU WANT TO DELETE YOUR ACCOUNT?
+                </ModalBody>
+                <Modal.Footer>
+                    <Button onClick={handleDeleteAccount} variant="danger">Yes Im Sure</Button>
+                    <Button onClick={handleCloseModal} variant="primary">Actually Im Not Sure</Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     )
 }

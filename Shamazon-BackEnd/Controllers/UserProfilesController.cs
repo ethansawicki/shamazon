@@ -38,7 +38,7 @@ namespace Shamazon.Controllers
             _userProfilesRepository.AddNewUserProfile(profile);
             return CreatedAtAction("GetLastId", new { id = profile.Id }, profile);
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteProfile(int id)
         {
             _userProfilesRepository.DeleteUserProfile(id);
