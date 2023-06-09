@@ -92,7 +92,7 @@ const addNewUserProfile = async (registerUserProfile, setUserInfo, token) => {
         const newUserProfileRequest = await fetch(`${api}/UserProfiles`, newUserProfileOptions)
         const newRequestJSON = await newUserProfileRequest.json()
         const newResponse = newRequestJSON
-        const getUserInfo = await getUserProfileById()
+        const getUserInfo = await getUserProfileById(token, newResponse.id)
         setUserInfo(getUserInfo)
         return newResponse
     } catch (error) {

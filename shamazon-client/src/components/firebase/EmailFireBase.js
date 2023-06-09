@@ -43,7 +43,6 @@ export const registerWithEmail = async (registerUser, setUserInfo, setOpenError 
             userAuth.firebaseId = userCred.user.uid;
             token = await auth.currentUser.getIdToken()
             try {
-                await userCheck(auth.currentUser.uid, token)
                 await addNewUser(userAuth, token, setUserInfo, registerUserProfile)
             } catch (error) {
                 console.error(error)

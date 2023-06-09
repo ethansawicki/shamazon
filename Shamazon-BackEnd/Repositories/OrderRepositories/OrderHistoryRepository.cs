@@ -18,12 +18,12 @@ namespace Shamazon.Repositories.OrderRepositories
                         SELECT
 	                        OH.id as OrderHistoryId, OH.orderNumber, OH.userId,
 	                        O.id as OrderId, O.userId, O.orderTotal, O.orderAddress, O.dateCreated,
-	                        P.id as ProductId, P.productDescription, P.productImg, P.productName, P.productCategoryId, P.productPrice,
+	                        
 	                        OI.OrderId as OrderItemId, OI.ProductId, OI.ProductQuantity
                         FROM OrderHistory as OH
                         JOIN Orders as O ON O.id = OH.orderNumber
                         JOIN OrderItem as OI ON OI.OrderId = O.id
-                        JOIN Products as P ON P.id = OI.ProductId   
+                       
                         WHERE OH.userId = @userId";
 
                     DbUtils.AddParameter(cmd, "@userId", userId);
@@ -45,30 +45,30 @@ namespace Shamazon.Repositories.OrderRepositories
                                 OrderTotal = DbUtils.GetDecimal(reader, "OrderTotal"),
                                 OrderAddress = DbUtils.GetString(reader, "OrderAddress"),
                                 OrderDate = DbUtils.GetDateTime(reader, "dateCreated"),
-                                OrderItem = new List<OrderItem>()
-                            };
-                            orderItems.Add(orderHistory);
-                        }
-                        if (DbUtils.IsNotNull(reader, "OrderItemId"))
-                        {
-                            orderHistory.OrderItem.Add(new OrderItem()
-                            {
-                                OrderItemId = DbUtils.GetInt(reader, "OrderItemId"),
-                                OrderId = DbUtils.GetInt(reader, "OrderId"),
-                                ProductQuantity = DbUtils.GetInt(reader, "ProductQuantity"),
-                                Products = new List<OrderedProducts>()
+                                OrderItem = new OrderItem()
                                 {
-                                    new OrderedProducts()
-                                    {
-                                        Id = DbUtils.GetInt(reader, "ProductId"),
-                                        ProductName = DbUtils.GetString(reader, "ProductName"),
-                                        ProductDescription = DbUtils.GetString(reader, "productDescription"),
-                                        ProductImg = DbUtils.GetString(reader, "productImg"),
-                                        ProductPrice = DbUtils.GetDecimal(reader, "productPrice"),
-                                    }
-                                }
-
-                            });
+                                    OrderItemId = DbUtils.GetInt(reader, "OrderItemId"),
+                                    OrderId = DbUtils.GetInt(reader, "OrderId"),
+                                    ProductQuantity = DbUtils.GetInt(reader, "ProductQuantity"),
+                                    Products = new List<OrderedProducts>()
+                                }   
+                            };
+                            reader.Close();
+                            cmd.CommandText = @"SELECT P.id as ProductId, P.productDescription, P.productImg, P.productName, P.productCategoryId, P.productPrice FROM Products as P";
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                orderHistory.OrderItem.Products.Add(new OrderedProducts()
+                                {
+                                    Id = DbUtils.GetInt(reader, "ProductId"),
+                                    ProductName = DbUtils.GetString(reader, "ProductName"),
+                                    ProductDescription = DbUtils.GetString(reader, "productDescription"),
+                                    ProductImg = DbUtils.GetString(reader, "productImg"),
+                                    ProductPrice = DbUtils.GetDecimal(reader, "productPrice"),
+                                });
+                            }
+                            
+                            orderItems.Add(orderHistory);
                         }
                     }
                     reader.Close();

@@ -1,4 +1,4 @@
-import { CardGroup, Container, Tab, Tabs } from "react-bootstrap"
+import { Card, CardGroup, Container, ListGroup, Stack, Tab, Tabs } from "react-bootstrap"
 import { getUserOrderHistory } from "../fetchcalls/fetchCalls";
 import { useParams } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
@@ -9,7 +9,7 @@ import { OrderHistory } from "./AccountOrderHistory";
 
 export const AccountUserProfile = ({userInfo}) => {
     const [totalUserPurchases, setTotalUserPurchases] = useState([])
-    const [purchases, setPurchases] = useState([])
+    const [userPurchases, setUserPurchases] = useState([])
     const [tab, setTab] = useState('AccountInfo')
     const [editMode, setEditMode] = useState(false)
     const { userId } = useParams();
@@ -29,9 +29,8 @@ export const AccountUserProfile = ({userInfo}) => {
     }
 
     useEffect(() => {
-        const morePurchases = totalUserPurchases.map((purchase) => setPurchases(purchase.orderItem))
-    },[fetchUserPurchases, totalUserPurchases])
-
+        totalUserPurchases.map((purchase) => setUserPurchases(purchase.orderItem.products))
+    },[totalUserPurchases])
 
     return (
         <Container>
@@ -46,15 +45,21 @@ export const AccountUserProfile = ({userInfo}) => {
                     <EditProfile editMode={editMode} setEditMode={setEditMode} userInfo={userInfo} />
                 </Tab>
                 <Tab eventKey="OrderHistory" title="Order History">
-                    {
-                        // purchases.map((purchase) => {
-                        //     return (
-                        //         <CardGroup key={purchase.orderItemId}>
-                        //             <OrderHistory purchase={purchase} />
-                        //         </CardGroup>
-                        //     )
-                        // })
-                    }
+                    <Container className="col-md-7 mx-auto">
+                        {
+                            totalUserPurchases.length >= 0 ?
+                            totalUserPurchases.map((product, idx) => {
+                                return (
+                                    
+                                    <ListGroup key={`order--${idx}`}>
+                                            <OrderHistory key={`order--${product.orderId}`} product={product} />
+                                    </ListGroup>
+                                )
+                            })
+                                :
+                                "No Previous Orders"
+                        }
+                    </Container>
                 </Tab>
             </Tabs>
         </Container>
