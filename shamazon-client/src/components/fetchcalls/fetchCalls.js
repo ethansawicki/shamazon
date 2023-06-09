@@ -178,3 +178,31 @@ export const getUserOrderHistory = async (userId) => {
         console.error(error)
     }
 }
+
+export const deleteUserProfile = async (userId) => {
+    try {
+        const options = {
+            method: "DELETE"
+        }
+        const request = await fetch(`${api}/UserProfiles/${userId}`, options)
+        const responseJSON = await request.json()
+        const response = responseJSON
+        return response
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const deleteDBUser = async (firebaseId) => {
+    try {
+        const options = {
+            method: "DELETE"
+        }
+        const request = await fetch(`${api}/Users/${firebaseId}`, options)
+        const responseJSON = await request.json()
+        const response = responseJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}

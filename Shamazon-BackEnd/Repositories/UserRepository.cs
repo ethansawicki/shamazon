@@ -96,14 +96,14 @@ namespace Shamazon.Repositories
                 }
             }
         }
-        public void DeleteAccount(int id)
+        public void DeleteAccount(string id)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM [Users] WHERE id = @id";
+                    cmd.CommandText = "DELETE FROM [Users] WHERE firebaseId = @id";
 
                     DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
