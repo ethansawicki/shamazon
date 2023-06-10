@@ -4,15 +4,18 @@ import { ErrorAlert } from "./AlertPrompt"
 import { registerWithEmail } from "../firebase/EmailFireBase"
 
 export const Register = ({registerModalOpen, setRegisterModalOpen, setUserInfo, openError, setOpenError}) => {
-    const [register, setRegister] = useState({})
-    const [profileRegister, setProfileRegister] = useState({})
-    const [registerProfile, setRegisterProfile] = useState(false)
+    const [register, setRegister] = useState({
+        email: "",
+        password: "",
+        displayName: "",
+        firstName: "",
+        lastName: "",
+        address: "",
+    })
 
     const handleClose = () => {
         setRegister({})
-        setProfileRegister({})
         setRegisterModalOpen(false)
-        setRegisterProfile(false)
     }
 
     const handleChange = (e) => {
@@ -22,18 +25,24 @@ export const Register = ({registerModalOpen, setRegisterModalOpen, setUserInfo, 
     }
 
     const handleRegister = async () => {
-        await registerWithEmail(register, setUserInfo, setOpenError, profileRegister)
-        setRegisterModalOpen(false)
-    }
-
-    const handleProfileAdd = (e) => {
-        const copy = { ...profileRegister }
-        copy[e.target.id] = e.target.value
-        setProfileRegister(copy)
-    }
-
-    const handleNext = () => {
-        setRegisterProfile(true)
+        try {
+            const user = {
+                email: register.email,
+                password: register.password
+            }
+            const userProfile = {
+                userId: "",
+                displayName: register.displayName,
+                firstName: register.firstName,
+                lastName: register.lastName,
+                address: register.lastName
+            }
+            await registerWithEmail(user, setUserInfo, setOpenError, userProfile)
+            setRegisterModalOpen(false)
+        } catch (error) {
+            console.error(error)
+            setOpenError(true)
+        }
     }
 
     return (
@@ -44,40 +53,29 @@ export const Register = ({registerModalOpen, setRegisterModalOpen, setUserInfo, 
                 </Modal.Header>
                 <Modal.Body>
                     <ErrorAlert openError={openError} setOpenError={setOpenError} />
-                        {
-                            !registerProfile ? 
                                 <Form>
                                     <FloatingLabel controlId="email" label="Email Address" className="mb-3">
-                                        <Form.Control type="email" value={register.email || ""} onChange={(e) => {handleChange(e)}} placeholder="name@example.com" />
+                                        <Form.Control type="email" onChange={(e) => {handleChange(e)}} placeholder="name@example.com" />
                                     </FloatingLabel>
                                     <FloatingLabel controlId="password" label="Password" className="mb-3">
-                                        <Form.Control type="password" value={register.password || ""} onChange={(e) => {handleChange(e)}} placeholder="Password" />
+                                        <Form.Control type="password" onChange={(e) => {handleChange(e)}} placeholder="Password" />
                                     </FloatingLabel>
-                                </Form>
-                            :
-                            <Form>
                                 <FloatingLabel controlId="displayName" label="Display Name" className="mb-3">
-                                    <Form.Control type="input" value={profileRegister.displayName || ""} onChange={(e) => {handleProfileAdd(e)}} placeholder="CoolUserName" />
+                                    <Form.Control type="displayName" onChange={(e) => {handleChange(e)}} placeholder="CoolUserName" />
                                 </FloatingLabel>
                                 <FloatingLabel controlId="firstName" label="First Name" className="mb-3">
-                                    <Form.Control type="input" value={profileRegister.firstName || ""} onChange={(e) => {handleProfileAdd(e)}} placeholder="Your First Name" />
+                                    <Form.Control type="firstName"  onChange={(e) => {handleChange(e)}} placeholder="Your First Name" />
                                 </FloatingLabel>
                                 <FloatingLabel controlId="lastName" label="Last Name" className="mb-3">
-                                    <Form.Control type="input" value={profileRegister.lastName || ""} onChange={(e) => {handleProfileAdd(e)}} placeholder="Your Last Name" />
+                                    <Form.Control type="lastName" onChange={(e) => {handleChange(e)}} placeholder="Your Last Name" />
                                 </FloatingLabel>
                                 <FloatingLabel controlId="address" label="Address" className="mb-3">
-                                    <Form.Control type="input" value={profileRegister.address || ""} onChange={(e) => {handleProfileAdd(e)}} placeholder="Your Address" />
+                                    <Form.Control type="address" onChange={(e) => {handleChange(e)}} placeholder="Your Address" />
                                 </FloatingLabel>
                             </Form>
-                        }
                 </Modal.Body>
                 <Modal.Footer>
-                    {
-                        !registerProfile ?
-                            <Button variant="primary" onClick={() => {handleNext()}}>Next</Button>
-                        :
-                            <Button variant="primary" onClick={() => {handleRegister()}}>Submit</Button>
-                    }
+                    <Button variant="primary" onClick={() => {handleRegister()}}>Submit</Button>
                     <Button variant="danger" onClick={handleClose} >Cancel</Button>
                 </Modal.Footer>
             </Modal>

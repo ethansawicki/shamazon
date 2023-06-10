@@ -33,17 +33,15 @@ export const logout = (setLoggedInUser) => {
     } 
 }
 
-export const registerWithEmail = async (registerUser, setUserInfo, setOpenError , registerUserProfile) => {
+export const registerWithEmail = async (registerUser, setUserInfo, setOpenError, registerUserProfile) => {
     const auth = getAuth();
     const userAuth = {}
-    let token = ""
      try {
         await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password).then(async (userCred) => {
             userAuth.email = userCred.user.email;
             userAuth.firebaseId = userCred.user.uid;
-            token = await auth.currentUser.getIdToken()
             try {
-                await addNewUser(userAuth, token, setUserInfo, registerUserProfile)
+                await addNewUser(userAuth, registerUserProfile, setUserInfo)
             } catch (error) {
                 console.error(error)
             }
@@ -52,7 +50,5 @@ export const registerWithEmail = async (registerUser, setUserInfo, setOpenError 
          console.error(error)
          setOpenError(true)
          signOut(auth)
-         sessionStorage.removeItem("__SESSION")
     }
-    
 }

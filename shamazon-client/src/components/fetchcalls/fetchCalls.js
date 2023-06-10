@@ -58,7 +58,9 @@ export const getSpecificProduct = async (productId) => {
     }
 }
 
-export const addNewUser = async (registerUser, token, setUserInfo, registerUserProfile) => {
+export const addNewUser = async (registerUser, registerUserProfile, setUserInfo) => {
+    const auth = getAuth();
+    const token = await auth.currentUser.getIdToken()
     try {
         const newUserOptions = {
             method: "POST",
@@ -71,15 +73,19 @@ export const addNewUser = async (registerUser, token, setUserInfo, registerUserP
         const newUserRequest = await fetch(`${api}/Users`, newUserOptions)
         const requestJSON = await newUserRequest.json()
         const response = await requestJSON
-        registerUserProfile.userId = await response.id
-        await addNewUserProfile(registerUserProfile, setUserInfo, token)
+        const responseId = response.id
+        await addNewUserProfile(registerUserProfile, responseId, setUserInfo)
         return response
     } catch (error) {
         console.error(error)
     }
 }
 
-const addNewUserProfile = async (registerUserProfile, setUserInfo, token) => {
+const addNewUserProfile = async (registerUserProfile, responseId, setUserInfo,) => {
+    const auth = getAuth();
+    const token = await auth.currentUser.getIdToken()
+    const uid = auth.currentUser.uid
+    registerUserProfile.userId = responseId
     try {
         const newUserProfileOptions = {
             method: "POST",
@@ -92,7 +98,7 @@ const addNewUserProfile = async (registerUserProfile, setUserInfo, token) => {
         const newUserProfileRequest = await fetch(`${api}/UserProfiles`, newUserProfileOptions)
         const newRequestJSON = await newUserProfileRequest.json()
         const newResponse = newRequestJSON
-        const getUserInfo = await getUserProfileById(token, newResponse.id)
+        const getUserInfo = await getUserProfileById(token, uid)
         setUserInfo(getUserInfo)
         return newResponse
     } catch (error) {
