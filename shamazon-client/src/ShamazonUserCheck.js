@@ -4,11 +4,13 @@ import { ShamazonVisitorView } from "./ShamazonVisitorView";
 import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getUserProfileById } from "./components/fetchcalls/fetchCalls";
+import { ShoppingCart } from "./components/cart/Cart";
 
 
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
   const [userInfo, setUserInfo] = useState()
+  const [cart, setCart] = useState([])
   const auth = getAuth(app);
   const navigate = useNavigate();
 
@@ -33,21 +35,26 @@ export const ShamazonUserCheck = ({app}) => {
   },[fetchUser, auth])
 
   if (loggedInUser === true) {
-    return <ShamazonLoggedInView
-      auth={auth}
-      userInfo={userInfo}
-      setUserInfo={setUserInfo}
-      loggedInUser={loggedInUser}
-      setLoggedInUser={setLoggedInUser}
-      navigate={navigate}
-    />
+    return <ShoppingCart>
+              <ShamazonLoggedInView
+              auth={auth}
+              userInfo={userInfo}
+              setUserInfo={setUserInfo}
+              loggedInUser={loggedInUser}
+              setLoggedInUser={setLoggedInUser}
+              navigate={navigate}
+            />
+      </ShoppingCart>
   } else {
-    return <ShamazonVisitorView
-      auth={auth}
-      userInfo={userInfo}
-      setUserInfo={setUserInfo}
-      loggedInUser={loggedInUser}
-      setLoggedInUser={setLoggedInUser}
-    />
+    return <ShoppingCart>
+
+      <ShamazonVisitorView
+        auth={auth}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+        loggedInUser={loggedInUser}
+        setLoggedInUser={setLoggedInUser}
+      />
+    </ShoppingCart>
   }
 }

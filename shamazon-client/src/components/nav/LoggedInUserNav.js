@@ -1,8 +1,12 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../firebase/EmailFireBase';
+import { CartBody } from '../cart/CartBody';
+import { useContext } from 'react';
+import { CartContext } from '../cart/Cart';
 
-export const LoggedInUserNav = ({displayName, setLoggedInUser, userInfo}) => {
+export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
+    const cart = useContext(CartContext);
     const handleLogout = () => {
        logout(setLoggedInUser)
     }
@@ -13,7 +17,7 @@ export const LoggedInUserNav = ({displayName, setLoggedInUser, userInfo}) => {
                 <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <LinkContainer to={`/account/${userInfo.id}`}><Nav.Link>Account</Nav.Link></LinkContainer>                   
+                        <LinkContainer to={`/account/${userInfo?.id}`}><Nav.Link>Account</Nav.Link></LinkContainer>                   
                         <LinkContainer to='search'><Nav.Link>Search</Nav.Link></LinkContainer>
                         <LinkContainer to='products'><Nav.Link>Products</Nav.Link></LinkContainer>
                             <NavDropdown title="Categories" id="basic-nav-dropdown">
@@ -32,6 +36,25 @@ export const LoggedInUserNav = ({displayName, setLoggedInUser, userInfo}) => {
                             </Popover>
                         }>
                     <Navbar.Text className='col-xl-2'>Signed in as: <a href='#logout'>{ userInfo?.userProfile?.displayName }</a></Navbar.Text>
+                    </OverlayTrigger>
+                        <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
+                            <Popover>
+                                <Popover.Header style={{textAlign: "center"}} as='h3'>Cart</Popover.Header>
+                                <Popover.Body>
+                                {
+                                    cart.items.length > 0 ?
+                                    cart.items.map((currentProduct, idx) => {
+                                        return (
+                                        <CartBody key={idx} currentProduct={currentProduct} />
+                                        )
+                                    })
+                                    : "You have no items in your cart"
+                                }
+                                <Button variant='primary' size='sm'>Checkout</Button>
+                                </Popover.Body>
+                            </Popover>
+                        }>
+                            <Button style={{marginLeft: "10px"}} variant='primary' size='sm'>Cart</Button>
                     </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    

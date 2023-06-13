@@ -4,6 +4,7 @@ import { NavbarContainer } from "./components/nav/NavContainer"
 import { useState } from "react"
 import { LoginContainer } from "./components/auth/LoginContainer"
 import { Register } from "./components/auth/Register"
+import { ShoppingCart } from "./components/cart/Cart"
 
 export const ShamazonVisitorView = ({auth, setLoggedInUser, userInfo, loggedInUser, setUserInfo}) => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -11,6 +12,7 @@ export const ShamazonVisitorView = ({auth, setLoggedInUser, userInfo, loggedInUs
     const [registerModalOpen, setRegisterModalOpen] = useState(false)
 
     return (
+        
         <Routes>
             <Route
                 path="*"
@@ -47,6 +49,7 @@ export const ShamazonVisitorView = ({auth, setLoggedInUser, userInfo, loggedInUs
                     </>
                 }
             />
-        </Routes>
+            </Routes>
+       
     )
 }

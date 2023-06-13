@@ -1,10 +1,15 @@
 import { Button, Col, Container, Form, Image, Modal, Row, Stack } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import "./modal.css"
+import { useContext } from "react";
+import { CartContext } from "../cart/Cart";
 
 
 
-export const SpecificProduct = ({ productModalShow, setProductModalShow, filteredProducts  }) => {
+
+export const SpecificProduct = ({ productModalShow, setProductModalShow, filteredProducts }) => {
+    const product = filteredProducts;
+    const cart = useContext(CartContext)
     const navigate = useNavigate();
     const handleClose = () => {
         setProductModalShow(false)
@@ -39,7 +44,7 @@ export const SpecificProduct = ({ productModalShow, setProductModalShow, filtere
             <Modal.Footer>
                 <Row>
                     <Col>
-                        <Button>Add to cart</Button>
+                        <Button onClick={() => cart.addOneToCart(product.id, product)}>Add to cart</Button>
                     </Col>
                 </Row>
             </Modal.Footer>

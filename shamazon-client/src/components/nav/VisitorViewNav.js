@@ -1,8 +1,12 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { CartBody } from '../cart/CartBody';
+import { useContext } from 'react';
+import { CartContext } from '../cart/Cart';
 
   
 export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, registerModalOpen }) => {
+    const cart = useContext(CartContext);
     const handleLoginModalOpen = () => {
         if (registerModalOpen === true) {
             setRegisterModalOpen(false)
@@ -51,7 +55,26 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                             </Popover>
                         }>
                             <Button variant="success" size='sm'>Log In or Sign Up</Button>
-                            </OverlayTrigger>
+                    </OverlayTrigger>
+                        <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
+                            <Popover>
+                                <Popover.Header style={{textAlign: "center"}} as='h3'>Cart</Popover.Header>
+                            <Popover.Body>
+                                {
+                                    cart.items.length > 0 ?
+                                    cart.items.map((currentProduct, idx) => {
+                                        return (
+                                        <CartBody key={idx} currentProduct={currentProduct} />
+                                        )
+                                    })
+                                    : "You have no items in your cart"
+                                }
+                                <Button variant='primary' size='sm'>You must sign in to checkout</Button>
+                                </Popover.Body>
+                            </Popover>
+                        }>
+                            <Button style={{marginLeft: "10px"}} variant='primary' size='sm'>Cart</Button>
+                    </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>
