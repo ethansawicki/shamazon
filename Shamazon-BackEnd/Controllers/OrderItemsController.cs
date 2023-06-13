@@ -20,7 +20,7 @@ namespace Shamazon.Controllers
         public IActionResult AddNewOrderItem(AddOrderItem addOrderItem)
         {
             _orderItemRepository.AddNewOrderItem(addOrderItem);
-            return CreatedAtAction("Get", new { id = addOrderItem.OrderItemId }, addOrderItem);
+            return CreatedAtAction("Get", new { id = addOrderItem.Id }, addOrderItem);
         }
 
         [HttpGet]

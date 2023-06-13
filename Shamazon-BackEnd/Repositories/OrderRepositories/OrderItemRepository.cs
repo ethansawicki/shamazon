@@ -12,14 +12,15 @@ namespace Shamazon.Repositories.OrderRepositories
             using (var cmd = Connection.CreateCommand())
             {
                 cmd.CommandText = @"
-                    INSERT INTO OrderItem (ProductQuantity, ProductId)
+                    INSERT INTO OrderItem (OrderId, ProductQuantity, ProductId)
                     OUTPUT INSERTED.ID
-                    VALUES (@ProductQuantity, @ProductId)";
+                    VALUES (@OrderId, @ProductQuantity, @ProductId)";
 
+                DbUtils.AddParameter(cmd, "@OrderId", addOrderItem.OrderId);
                 DbUtils.AddParameter(cmd, "@ProductQuantity", addOrderItem.ProductQuantity);
                 DbUtils.AddParameter(cmd, "@ProductId", addOrderItem.ProductId);
 
-                addOrderItem.OrderItemId = (int)cmd.ExecuteScalar();
+                addOrderItem.Id = (int)cmd.ExecuteScalar();
             }
         }
 

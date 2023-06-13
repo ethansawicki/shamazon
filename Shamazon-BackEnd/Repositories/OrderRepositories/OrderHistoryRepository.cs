@@ -76,5 +76,48 @@ namespace Shamazon.Repositories.OrderRepositories
                 }
             }
         }
+        public void AddOrderHistory (AddToOrderHistory addToOrderHistory)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO OrderHistory (userId, orderNumber)
+                        OUTPUT INSERTED.ID
+                        VALUES (@userId, @orderNumber)";
+
+                    DbUtils.AddParameter(cmd, "@userId", addToOrderHistory.UserId);
+                    DbUtils.AddParameter(cmd, "@orderNumber", addToOrderHistory.OrderNumber);
+
+                    addToOrderHistory.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        public LastOrderHistory GetLastOrderHistory()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT IDENT_CURRENT('Orderhistory') as LastId";
+                    var reader = cmd.ExecuteReader();
+                    LastOrderHistory lastUserProfileId = new LastOrderHistory();
+                    if (DbUtils.IsNotNull(reader, "LastId"))
+                    {
+                        lastUserProfileId = new LastOrderHistory()
+                        {
+                            Id = DbUtils.GetInt(reader, "LastId")
+                        };
+                    }
+                    reader.Close();
+
+                    return lastUserProfileId;
+                }
+            }
+        }
     }
 }

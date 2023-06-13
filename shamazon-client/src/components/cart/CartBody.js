@@ -24,8 +24,8 @@ export const CartBody = ({ currentProduct }) => {
                     <Card>
                         <Card.Body>
                             <Card.Title>{product?.product?.productName}</Card.Title>
-                            <Button variant="danger" size="sm" onClick={() => { cart.deleteFromCart(id) }}>Remove</Button>
                             <Card.Text>Quantity: { quantity }</Card.Text>
+                            <Button variant="danger" size="sm" onClick={() => { cart.deleteFromCart(id) }}>Remove</Button>
                         </Card.Body>
                     </Card>
                     :

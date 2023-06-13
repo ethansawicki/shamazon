@@ -212,3 +212,49 @@ export const deleteDBUser = async (firebaseId) => {
         console.error(error)
     }
 }
+
+export const addNewOrder = async (order, orderHistory, orderItem) => {
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        }
+        const request = await fetch(`${api}/Orders`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        await addNewOrder(response.id, orderItem)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const addNewOrderHistory = async (orderHistory) => {
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderHistory)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const addNewOrderItem = async (responseId, orderItem) => {
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderItem)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}

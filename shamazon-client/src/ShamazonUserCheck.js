@@ -35,8 +35,7 @@ export const ShamazonUserCheck = ({app}) => {
   },[fetchUser, auth])
 
   if (loggedInUser === true) {
-    return <ShoppingCart>
-              <ShamazonLoggedInView
+    return  <ShamazonLoggedInView
               auth={auth}
               userInfo={userInfo}
               setUserInfo={setUserInfo}
@@ -44,17 +43,14 @@ export const ShamazonUserCheck = ({app}) => {
               setLoggedInUser={setLoggedInUser}
               navigate={navigate}
             />
-      </ShoppingCart>
   } else {
-    return <ShoppingCart>
-
-      <ShamazonVisitorView
+    return <ShamazonVisitorView
         auth={auth}
         userInfo={userInfo}
         setUserInfo={setUserInfo}
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}
       />
-    </ShoppingCart>
+    
   }
 }

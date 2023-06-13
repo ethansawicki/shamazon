@@ -13,6 +13,7 @@ export const SpecificProduct = ({ productModalShow, setProductModalShow, filtere
     const navigate = useNavigate();
     const handleClose = () => {
         setProductModalShow(false)
+        cart.addOneToCart(product.id, product)
         navigate("/products")    
     }
 
@@ -44,7 +45,7 @@ export const SpecificProduct = ({ productModalShow, setProductModalShow, filtere
             <Modal.Footer>
                 <Row>
                     <Col>
-                        <Button onClick={() => cart.addOneToCart(product.id, product)}>Add to cart</Button>
+                        <Button onClick={() => {handleClose()}}>Add to cart</Button>
                     </Col>
                 </Row>
             </Modal.Footer>

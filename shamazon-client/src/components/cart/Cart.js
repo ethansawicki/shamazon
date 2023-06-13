@@ -1,21 +1,22 @@
 import { createContext } from "react"
-import { getProducts, getSpecificProduct } from "../fetchcalls/fetchCalls";
 import { useState } from "react";
+import { addNewOrder } from "../fetchcalls/fetchCalls";
 
 export const CartContext = createContext({
     items: [],
+    orderItems: [],
     getProductQuantity: () => { },
     addOneToCart: () => { },
     removeOneFromCart: () => { },
     deleteFromCart: () => { },
     getTotalCost: () => { },
-    addObjToCart: () => {}
+    submitOrder: async () => {}
 })
 
-export const ShoppingCart = ({ children }) => {
+export const ShoppingCart = ({ children, userInfo }) => {
     
     const [cartProducts, setCartProducts] = useState([]);
-
+    const [cartOrder, setCartOrder] = useState([])
     // [ {  id: 1, quantity: 2 } ]= cart
 
     const getProductQuantity = (id) => {
@@ -32,22 +33,46 @@ export const ShoppingCart = ({ children }) => {
     const addOneToCart = (id, product) => {
         const quantity = getProductQuantity(id);
 
-        if(quantity === 0) {
+        if (quantity === 0) {
+        
+            setCartOrder(
+                [
+                    ...cartOrder,
+                    {
+                        productId: id,
+                        quantity: 1,
+                        userId: userInfo?.id,
+                        orderAddress: userInfo?.userProfile?.address,
+                        orderTotal: 0
+                    }
+                ]
+            )
             setCartProducts(
                 [
                     ...cartProducts,
                     {
                         id: id,
+                        productId: id,
                         quantity: 1,
-                        product: product
+                        userId: userInfo.id,
+                        product: product,
                     }
                 ]
             )
         } else {
+            setCartOrder(
+                cartOrder.map(
+                    product =>
+                        product.productId === id
+                            ?
+                            { ...product, quantity: product.quantity + 1 }
+                            : product
+                )
+            )
             setCartProducts(
                 cartProducts.map(
                     product =>
-                    product.id === id
+                    id === product.id
                     ?
                     { ...product, quantity: product.quantity + 1}
                     : product
@@ -78,27 +103,46 @@ export const ShoppingCart = ({ children }) => {
         setCartProducts(
             cartProducts => 
             cartProducts.filter(currentProduct => {
-                return currentProduct.id !=id;
+                return currentProduct.id !== id;
             })
+        )
+        setCartOrder(
+            cartOrder => 
+                cartOrder.filter(currentProduct => {
+                    return currentProduct.productId !== id;
+                })
         )
     }
 
     const getTotalCost = () => {
         let totalCost = 0;
         cartProducts.map((cartItem) => {
-            const productData = getSpecificProduct(cartItem.id);
-            totalCost += (productData.price * cartItem.quantity)
+            const productData = cartItem;
+            totalCost += (productData?.product?.productPrice * cartItem.quantity)
         });
         return totalCost;
+    }
+    const submitOrder = async () => {
+        let orderObject = {}
+        cartOrder.map((order) => {
+          return  orderObject += {
+                userId: order.userId,
+                orderAddress: order.orderAddress,
+                orderTotal: order.orderTotal
+            }
+        })
+        await addNewOrder(orderObject)
     }
 
     const contextValue = {
         items: cartProducts,
+        orderItems: cartOrder,
         getProductQuantity,
         addOneToCart,
         removeOneFromCart,
         deleteFromCart,
         getTotalCost,
+        submitOrder
     }
 
     return (

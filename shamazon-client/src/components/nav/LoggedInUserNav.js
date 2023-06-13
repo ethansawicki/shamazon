@@ -1,8 +1,8 @@
-import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, Stack } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../firebase/EmailFireBase';
 import { CartBody } from '../cart/CartBody';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CartContext } from '../cart/Cart';
 
 export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
@@ -50,8 +50,14 @@ export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
                                     })
                                     : "You have no items in your cart"
                                 }
-                                <Button variant='primary' size='sm'>Checkout</Button>
-                                </Popover.Body>
+                                
+                            </Popover.Body>
+                            <Popover.Body>
+                                <Stack>
+                                Total: ${cart.getTotalCost().toFixed(2)}
+                                <Button onClick={() => {cart.submitOrder()}} variant='primary' size='sm'>Checkout</Button>
+                                </Stack>
+                            </Popover.Body>
                             </Popover>
                         }>
                             <Button style={{marginLeft: "10px"}} variant='primary' size='sm'>Cart</Button>
