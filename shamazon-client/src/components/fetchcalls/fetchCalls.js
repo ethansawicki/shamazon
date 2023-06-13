@@ -213,47 +213,71 @@ export const deleteDBUser = async (firebaseId) => {
     }
 }
 
-export const addNewOrder = async (order, orderHistory, orderItem) => {
+export const addNewOrder = async (order) => {
+    const newOrder = {
+        userId: order.userId,
+        orderTotal: order.orderTotal,
+        orderAddress: order.orderAddress
+    }
     try {
         const options = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(newOrder)
         }
         const request = await fetch(`${api}/Orders`, options)
         const requestJSON = await request.json()
         const response = requestJSON
-        await addNewOrder(response.id, orderItem)
+        await addNewOrderItem(response.id, order)
+        await addNewOrderHistory(response.id, order)
+        return response
     } catch (error) {
         console.error(error)
     }
 }
 
-export const addNewOrderHistory = async (orderHistory) => {
+export const addNewOrderHistory = async (response, order) => {
+    const newOrder = {
+        userId: order.userId,
+        orderNumber: response
+    }
     try {
         const options = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(orderHistory)
+            body: JSON.stringify(newOrder)
         }
+        const request = await fetch(`${api}/OrderHistory`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
     } catch (error) {
         console.error(error)
     }
 }
 
-export const addNewOrderItem = async (responseId, orderItem) => {
+export const addNewOrderItem = async (responseId, order) => {
+    const newOrder = {
+        orderId: responseId,
+        productId: order.productId,
+        productQuantity: order.Quantity
+    }
     try {
         const options = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(orderItem)
+            body: JSON.stringify(newOrder)
         }
+        const request = await fetch(`${api}/OrderItems`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
     } catch (error) {
         console.error(error)
     }

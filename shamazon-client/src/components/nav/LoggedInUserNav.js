@@ -2,14 +2,28 @@ import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, St
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../firebase/EmailFireBase';
 import { CartBody } from '../cart/CartBody';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { CartContext } from '../cart/Cart';
+import { addNewOrder } from '../fetchcalls/fetchCalls';
 
-export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
+export const LoggedInUserNav = ({ setLoggedInUser, userInfo }) => {
     const cart = useContext(CartContext);
     const handleLogout = () => {
        logout(setLoggedInUser)
     }
+
+    const handleOrder = async () => {
+        const orderCost = cart.getTotalCost()
+        for (const order of cart.orderItems) {
+            order.orderTotal = orderCost
+            console.log(order)
+            await addNewOrder(order)
+            //await addNewOrder(order)
+        }
+    }
+
+
+
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
             <Container>
@@ -28,7 +42,7 @@ export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
                     </Nav>
                     <OverlayTrigger placement='bottom' trigger="click" rootClose overlay={
                             <Popover>
-                            <Popover.Header as='h3'>Hello! { displayName }</Popover.Header>
+                            <Popover.Header as='h3'>Hello! { userInfo?.userProfile?.displayName }</Popover.Header>
                                 <Popover.Body>
                                 <p style={{textAlign: "center"}}>Sign Out?</p>
                                     <Button variant='danger' size='lg' onClick={() => { handleLogout() }}>Sign Out</Button>
@@ -45,7 +59,7 @@ export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
                                     cart.items.length > 0 ?
                                     cart.items.map((currentProduct, idx) => {
                                         return (
-                                        <CartBody key={idx} currentProduct={currentProduct} />
+                                            <CartBody key={idx} currentProduct={currentProduct} />
                                         )
                                     })
                                     : "You have no items in your cart"
@@ -55,7 +69,7 @@ export const LoggedInUserNav = ({ displayName, setLoggedInUser, userInfo }) => {
                             <Popover.Body>
                                 <Stack>
                                 Total: ${cart.getTotalCost().toFixed(2)}
-                                <Button onClick={() => {cart.submitOrder()}} variant='primary' size='sm'>Checkout</Button>
+                                <Button onClick={() => {handleOrder()}} variant='primary' size='sm'>Checkout</Button>
                                 </Stack>
                             </Popover.Body>
                             </Popover>

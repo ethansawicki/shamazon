@@ -4,19 +4,18 @@ import { addNewOrder } from "../fetchcalls/fetchCalls";
 
 export const CartContext = createContext({
     items: [],
-    orderItems: [],
+    orderItems: {},
     getProductQuantity: () => { },
     addOneToCart: () => { },
     removeOneFromCart: () => { },
     deleteFromCart: () => { },
     getTotalCost: () => { },
-    submitOrder: async () => {}
 })
 
 export const ShoppingCart = ({ children, userInfo }) => {
     
     const [cartProducts, setCartProducts] = useState([]);
-    const [cartOrder, setCartOrder] = useState([])
+    const [cartOrder, setCartOrder] = useState({})
     // [ {  id: 1, quantity: 2 } ]= cart
 
     const getProductQuantity = (id) => {
@@ -36,16 +35,16 @@ export const ShoppingCart = ({ children, userInfo }) => {
         if (quantity === 0) {
         
             setCartOrder(
-                [
+                
                     ...cartOrder,
                     {
-                        productId: id,
                         quantity: 1,
                         userId: userInfo?.id,
                         orderAddress: userInfo?.userProfile?.address,
+                        product: [product.id],
                         orderTotal: 0
                     }
-                ]
+                
             )
             setCartProducts(
                 [
@@ -61,7 +60,7 @@ export const ShoppingCart = ({ children, userInfo }) => {
             )
         } else {
             setCartOrder(
-                cartOrder.map(
+                cartOrder.product.map(
                     product =>
                         product.productId === id
                             ?
@@ -122,17 +121,7 @@ export const ShoppingCart = ({ children, userInfo }) => {
         });
         return totalCost;
     }
-    const submitOrder = async () => {
-        let orderObject = {}
-        cartOrder.map((order) => {
-          return  orderObject += {
-                userId: order.userId,
-                orderAddress: order.orderAddress,
-                orderTotal: order.orderTotal
-            }
-        })
-        await addNewOrder(orderObject)
-    }
+    
 
     const contextValue = {
         items: cartProducts,
@@ -142,7 +131,6 @@ export const ShoppingCart = ({ children, userInfo }) => {
         removeOneFromCart,
         deleteFromCart,
         getTotalCost,
-        submitOrder
     }
 
     return (

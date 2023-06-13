@@ -58,5 +58,29 @@ namespace Shamazon.Repositories.OrderRepositories
                 }
             }
         }
+        public LastOrderHistory GetLastOrderHistory()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT IDENT_CURRENT('Orderhistory') as LastId";
+                    var reader = cmd.ExecuteReader();
+                    LastOrderHistory lastUserProfileId = new LastOrderHistory();
+                    if (DbUtils.IsNotNull(reader, "LastId"))
+                    {
+                        lastUserProfileId = new LastOrderHistory()
+                        {
+                            Id = DbUtils.GetInt(reader, "LastId")
+                        };
+                    }
+                    reader.Close();
+
+                    return lastUserProfileId;
+                }
+            }
+        }
     }
 }

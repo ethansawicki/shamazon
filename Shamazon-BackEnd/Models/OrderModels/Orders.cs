@@ -30,4 +30,9 @@
         public string OrderAddress { get; set; }
         public DateTime OrderDate { get; set; }
     }
+
+    public class LastOrder
+    {
+        public int Id { get; set; }
+    }
 }
