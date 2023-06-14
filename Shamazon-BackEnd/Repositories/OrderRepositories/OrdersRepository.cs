@@ -11,17 +11,17 @@ namespace Shamazon.Repositories.OrderRepositories
             using (var conn = Connection)
             { 
                 conn.Open(); 
-                using (var cmd = Connection.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO OrderItem (UserId, OrderTotal, OrderAddress, OrderDate)
+                        INSERT INTO Orders (userId, orderTotal, orderAddress, dateCreated)
                         OUTPUT INSERTED.ID
-                        VALUES (@UserId, @OrderTotal, @OrderAddress, @OrderDate)";
+                        VALUES (@userId, @orderTotal, @orderAddress, @dateCreated)";
 
-                    DbUtils.AddParameter(cmd, "@UserId", orderAdd.UserId);
-                    DbUtils.AddParameter(cmd, "@OrderTotal", orderAdd.OrderTotal);
-                    DbUtils.AddParameter(cmd, "@OrderAddress", orderAdd.OrderAddress);
-                    DbUtils.AddParameter(cmd, "@OrderDate", orderAdd.OrderDate);
+                    DbUtils.AddParameter(cmd, "@userId", orderAdd.UserId);
+                    DbUtils.AddParameter(cmd, "@orderTotal", orderAdd.OrderTotal);
+                    DbUtils.AddParameter(cmd, "@orderAddress", orderAdd.OrderAddress);
+                    DbUtils.AddParameter(cmd, "@dateCreated", orderAdd.OrderDate);
 
                     orderAdd.Id = (int)cmd.ExecuteScalar();
                 }

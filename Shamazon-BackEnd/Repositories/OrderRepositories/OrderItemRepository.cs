@@ -9,8 +9,11 @@ namespace Shamazon.Repositories.OrderRepositories
 
         public void AddNewOrderItem(AddOrderItem addOrderItem)
         {
-            using (var cmd = Connection.CreateCommand())
+            using (var conn = Connection)
             {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
                 cmd.CommandText = @"
                     INSERT INTO OrderItem (OrderId, ProductQuantity, ProductId)
                     OUTPUT INSERTED.ID
@@ -21,6 +24,7 @@ namespace Shamazon.Repositories.OrderRepositories
                 DbUtils.AddParameter(cmd, "@ProductId", addOrderItem.ProductId);
 
                 addOrderItem.Id = (int)cmd.ExecuteScalar();
+                }
             }
         }
 

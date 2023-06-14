@@ -2,27 +2,35 @@ import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, St
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../firebase/EmailFireBase';
 import { CartBody } from '../cart/CartBody';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CartContext } from '../cart/Cart';
-import { addNewOrder } from '../fetchcalls/fetchCalls';
+import { addNewOrder, addNewOrderHistory, addNewOrderItem } from '../fetchcalls/fetchCalls';
 
 export const LoggedInUserNav = ({ setLoggedInUser, userInfo }) => {
     const cart = useContext(CartContext);
     const handleLogout = () => {
        logout(setLoggedInUser)
     }
+    
 
     const handleOrder = async () => {
-        const orderCost = cart.getTotalCost()
-        for (const order of cart.orderItems) {
-            order.orderTotal = orderCost
-            console.log(order)
-            await addNewOrder(order)
-            //await addNewOrder(order)
+        const total = cart.getTotalCost()
+        cart.order.orderTotal = total
+        const orderItem = cart.items
+        const id = await addNewOrder(cart.order, orderItem)
+        for (const orders of cart.products) {
+            orders.orderId = id.id
+            console.log(orders)
+            const orderHistory = {
+                orderNumber: orders.orderId,
+                userId: orders.userId
+            }
+            await addNewOrderItem(orders)
+            await addNewOrderHistory(orderHistory)
         }
     }
 
-
+    
 
     return (
         <Navbar fixed='top' bg="dark" variant="dark" expand="xxl">
@@ -68,7 +76,7 @@ export const LoggedInUserNav = ({ setLoggedInUser, userInfo }) => {
                             </Popover.Body>
                             <Popover.Body>
                                 <Stack>
-                                Total: ${cart.getTotalCost().toFixed(2)}
+                                Total: ${ cart.getTotalCost().toFixed(2)}
                                 <Button onClick={() => {handleOrder()}} variant='primary' size='sm'>Checkout</Button>
                                 </Stack>
                             </Popover.Body>

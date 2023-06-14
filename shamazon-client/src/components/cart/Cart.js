@@ -1,10 +1,10 @@
-import { createContext } from "react"
+import { createContext, useContext } from "react"
 import { useState } from "react";
-import { addNewOrder } from "../fetchcalls/fetchCalls";
 
 export const CartContext = createContext({
     items: [],
-    orderItems: {},
+    order: [],
+    products: [],
     getProductQuantity: () => { },
     addOneToCart: () => { },
     removeOneFromCart: () => { },
@@ -16,7 +16,7 @@ export const ShoppingCart = ({ children, userInfo }) => {
     
     const [cartProducts, setCartProducts] = useState([]);
     const [cartOrder, setCartOrder] = useState({})
-    // [ {  id: 1, quantity: 2 } ]= cart
+    const [products, setProducts] = useState([])
 
     const getProductQuantity = (id) => {
        const quantity = cartProducts.find(product => product.id === id)?.quantity
@@ -35,16 +35,21 @@ export const ShoppingCart = ({ children, userInfo }) => {
         if (quantity === 0) {
         
             setCartOrder(
-                
-                    ...cartOrder,
                     {
-                        quantity: 1,
                         userId: userInfo?.id,
                         orderAddress: userInfo?.userProfile?.address,
-                        product: [product.id],
                         orderTotal: 0
                     }
-                
+            )
+            setProducts(
+                [
+                    ...products,
+                    {
+                        productId: id,
+                        productQuantity: 1,
+                        userId: userInfo?.id
+                    }
+                ]
             )
             setCartProducts(
                 [
@@ -59,12 +64,12 @@ export const ShoppingCart = ({ children, userInfo }) => {
                 ]
             )
         } else {
-            setCartOrder(
-                cartOrder.product.map(
+            setProducts(
+                products.map(
                     product =>
                         product.productId === id
                             ?
-                            { ...product, quantity: product.quantity + 1 }
+                            { ...product, productQuantity: product.productQuantity + 1 }
                             : product
                 )
             )
@@ -105,9 +110,9 @@ export const ShoppingCart = ({ children, userInfo }) => {
                 return currentProduct.id !== id;
             })
         )
-        setCartOrder(
-            cartOrder => 
-                cartOrder.filter(currentProduct => {
+        setProducts(
+            products =>
+                products.filter(currentProduct => {
                     return currentProduct.productId !== id;
                 })
         )
@@ -125,7 +130,8 @@ export const ShoppingCart = ({ children, userInfo }) => {
 
     const contextValue = {
         items: cartProducts,
-        orderItems: cartOrder,
+        order: cartOrder,
+        products: products,
         getProductQuantity,
         addOneToCart,
         removeOneFromCart,
