@@ -16,7 +16,7 @@ export const LoginWithEmail = ({setLoggedInUser, modalOpen, setModalOpen, setUse
         setOpenError(false)
     }
     const handleLogin = async () => {
-      await logInWithEmail(email, password, navigate, setLoggedInUser, openError, setOpenError, setUserInfo)
+      await logInWithEmail(email, password, navigate, setLoggedInUser, setOpenError, openError)
     }
 
     return (

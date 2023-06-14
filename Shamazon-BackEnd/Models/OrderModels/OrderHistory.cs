@@ -15,10 +15,14 @@
 
     public class AddToOrderHistory
     {
-        public int OrderHistoryId { get; set; }
+        public int Id { get; set; }
 
         public int UserId { get; set; }
 
         public int OrderNumber { get; set; }
+    }
+    public class LastOrderHistory
+    {
+        public int Id { get; set; }
     }
 }

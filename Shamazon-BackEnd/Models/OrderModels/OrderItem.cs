@@ -23,7 +23,7 @@
 
     public class AddOrderItem
     {
-        public int OrderItemId { get; set; }
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int ProductQuantity { get; set; }

@@ -1,6 +1,7 @@
 import { Navbar,Nav, NavDropdown, Button, Container, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+
   
 export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, registerModalOpen }) => {
     const handleLoginModalOpen = () => {
@@ -51,7 +52,7 @@ export const VisitorViewNav = ({ setModalOpen, setRegisterModalOpen, modalOpen, 
                             </Popover>
                         }>
                             <Button variant="success" size='sm'>Log In or Sign Up</Button>
-                            </OverlayTrigger>
+                    </OverlayTrigger>
                 </Navbar.Collapse>
             </Container>    
         </Navbar>

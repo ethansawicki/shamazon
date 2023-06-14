@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shamazon.Models.OrderControllers;
 using Shamazon.Repositories.OrderRepositories;
 
 namespace Shamazon.Controllers
@@ -24,6 +25,17 @@ namespace Shamazon.Controllers
                 return NotFound();
             }
             return Ok(orderItem);
+        }
+        [HttpPost]
+        public IActionResult AddNewOrderHistory(AddToOrderHistory orderHistory)
+        {
+            _orderHistoryRepository.AddOrderHistory(orderHistory);
+            return CreatedAtAction("GetLastId", new { id = orderHistory.Id }, orderHistory);
+        }
+        [HttpGet]
+        public IActionResult GetLastId() 
+        {
+            return Ok(_orderHistoryRepository.GetLastOrderHistory());
         }
     }
 }

@@ -8,19 +8,23 @@ namespace Shamazon.Repositories.OrderRepositories
         public OrdersRepository(IConfiguration configuration) : base(configuration) { }
         public void AddNewOrder(OrderAdd orderAdd)
         {
-            using (var cmd = Connection.CreateCommand())
-            {
-                cmd.CommandText = @"
-                    INSERT INTO OrderItem (UserId, OrderTotal, OrderAddress, OrderDate)
-                    OUTPUT INSERTED.ID
-                    VALUES (@UserId, @OrderTotal, @OrderAddress, @OrderDate)";
+            using (var conn = Connection)
+            { 
+                conn.Open(); 
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Orders (userId, orderTotal, orderAddress, dateCreated)
+                        OUTPUT INSERTED.ID
+                        VALUES (@userId, @orderTotal, @orderAddress, @dateCreated)";
 
-                DbUtils.AddParameter(cmd, "@UserId", orderAdd.UserId);
-                DbUtils.AddParameter(cmd, "@OrderTotal", orderAdd.OrderTotal);
-                DbUtils.AddParameter(cmd, "@OrderAddress", orderAdd.OrderAddress);
-                DbUtils.AddParameter(cmd, "@OrderDate", orderAdd.OrderDate);
+                    DbUtils.AddParameter(cmd, "@userId", orderAdd.UserId);
+                    DbUtils.AddParameter(cmd, "@orderTotal", orderAdd.OrderTotal);
+                    DbUtils.AddParameter(cmd, "@orderAddress", orderAdd.OrderAddress);
+                    DbUtils.AddParameter(cmd, "@dateCreated", orderAdd.OrderDate);
 
-                orderAdd.Id = (int)cmd.ExecuteScalar();
+                    orderAdd.Id = (int)cmd.ExecuteScalar();
+                }
             }
         }
 
@@ -51,6 +55,30 @@ namespace Shamazon.Repositories.OrderRepositories
                     }
                     reader.Close();
                     return orders;
+                }
+            }
+        }
+        public LastOrderHistory GetLastOrderHistory()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT IDENT_CURRENT('Orderhistory') as LastId";
+                    var reader = cmd.ExecuteReader();
+                    LastOrderHistory lastUserProfileId = new LastOrderHistory();
+                    if (DbUtils.IsNotNull(reader, "LastId"))
+                    {
+                        lastUserProfileId = new LastOrderHistory()
+                        {
+                            Id = DbUtils.GetInt(reader, "LastId")
+                        };
+                    }
+                    reader.Close();
+
+                    return lastUserProfileId;
                 }
             }
         }

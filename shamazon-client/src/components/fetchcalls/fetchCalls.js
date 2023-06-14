@@ -212,3 +212,75 @@ export const deleteDBUser = async (firebaseId) => {
         console.error(error)
     }
 }
+
+export const addNewOrder = async (order, orderItem) => {
+    const newOrder = {
+        userId: order.userId,
+        orderTotal: order.orderTotal,
+        orderAddress: order.orderAddress,
+        orderDate: new Date().toISOString()
+    }
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newOrder)
+        }
+        const request = await fetch(`${api}/Orders`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        //await addNewOrderItem(response.id, orderItem)
+        //await addNewOrderHistory(response.id, orderItem)
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const addNewOrderHistory = async (order) => {
+    // const newOrder = {
+    //     userId: order.userId,
+    //     orderNumber: response
+    // }
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        }
+        const request = await fetch(`${api}/OrderHistory`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const addNewOrderItem = async (order) => {
+    
+    // const newOrder = {
+    //     orderId: responseId,
+    //     productId: order.productId,
+    //     productQuantity: order.Quantity
+    // }
+    try {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        }
+        const request = await fetch(`${api}/OrderItems`, options)
+        const requestJSON = await request.json()
+        const response = requestJSON
+        return response
+    } catch (error) {
+        console.error(error)
+    }
+}
