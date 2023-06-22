@@ -26,21 +26,21 @@ export const OrderHistory = ({ product }) => {
                         </Row>
                     </ListGroup.Item>
                         {
-                            product?.orderItem?.product?.map((products) => {
+                            product?.orderItem.map((products) => {
                                 return (
                                     <ListGroup.Item key={`product--${products.id}`}>
                                         <Row> 
                                         <Col xs={{order: `1`}}>
-                                            <Image width={"100rem"} src={products.productImg} />
+                                            <Image width={"100rem"} src={products.product.productImg} />
                                         </Col>
                                         <Col xs={{order: `4`}}>
-                                           Price: {formatPrice.format(products.productPrice)}
+                                           Price: {formatPrice.format(products.product.productPrice)}
                                         </Col>
                                         <Col xs={{ order: `3` }}>
-                                            Product Description: {products.productDescription}
+                                            Product Description: {products.product.productDescription}
                                             </Col>
                                             <Col xs={{ order: `2` }}>
-                                                {products.productName}
+                                                {products.product.productName}
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>

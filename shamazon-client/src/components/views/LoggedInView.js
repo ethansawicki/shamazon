@@ -9,7 +9,7 @@ export const LoggedInView = ({ userInfo, userUpdate, setUserUpdate }) => {
     return (
         <Routes>
             <Route path="/" element={
-                    <UserHome />
+                    <UserHome userInfo={userInfo} />
             } />
             <Route path="account" element={
                 <AccountContainer userInfo={userInfo} />    
