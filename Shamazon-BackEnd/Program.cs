@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shamazon;
+using Shamazon.Models.Stripe;
 using Shamazon.Repositories;
 using Shamazon.Repositories.OrderRepositories;
 
@@ -35,6 +37,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+    //app.UseUrls("http://0.0.0.0:4242")
+    //          .UseWebRoot("public")
+    //          .UseStartup<Startup>()
+    //          .Build()
+    //          .Run();
 var firebaseProjectId = builder.Configuration.GetValue<string>("FirebaseProjectId");
 var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
 
@@ -44,6 +51,7 @@ builder.Services.AddTransient<IOrderHistoryRepository, OrderHistoryRepository>()
 builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
 builder.Services.AddTransient<IUserProfilesRepository, UserProfilesRepository>();
 builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
+builder.Services.AddTransient<Startup>();
 builder.Services.AddStripeInfrastructure(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -75,7 +83,6 @@ if (app.Environment.IsDevelopment())
         options.AllowAnyHeader();
     });
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
