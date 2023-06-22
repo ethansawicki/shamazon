@@ -7,7 +7,7 @@ import { OrderHistory } from "./AccountOrderHistory";
 
 
 
-export const AccountUserProfile = ({userInfo}) => {
+export const AccountUserProfile = ({userInfo, setUserUpdate}) => {
     const [totalUserPurchases, setTotalUserPurchases] = useState([])
     const [userPurchases, setUserPurchases] = useState([])
     const [tab, setTab] = useState('AccountInfo')
@@ -42,7 +42,7 @@ export const AccountUserProfile = ({userInfo}) => {
                 onSelect={(k) => tabSelect(k)}
                 fill>
                 <Tab eventKey="AccountInfo" title="Account Info">
-                    <EditProfile editMode={editMode} setEditMode={setEditMode} userInfo={userInfo} />
+                    <EditProfile editMode={editMode} setEditMode={setEditMode} setUserUpdate={setUserUpdate} userInfo={userInfo} />
                 </Tab>
                 <Tab eventKey="OrderHistory" title="Order History">
                     <Container className="col-md-7 mx-auto">
