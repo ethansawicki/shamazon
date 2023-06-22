@@ -4,7 +4,7 @@ import { deleteDBUser, deleteUserProfile, updateProfile } from "../fetchcalls/fe
 import { deleteUser, getAuth, signOut } from "firebase/auth"
 
 
-export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
+export const EditProfile = ({ userInfo, editMode, setEditMode, setUserUpdate }) => {
     const [userProfile, setUserProfile] = useState()
     const [openDeleteModal, setOpenDeleteModal] = useState(false) 
 
@@ -25,6 +25,7 @@ export const EditProfile = ({ userInfo, editMode, setEditMode }) => {
     const handleUpdate = async () => {
         await updateProfile(userProfile)
         setEditMode(false)
+        setUserUpdate(1)
     }
 
     const handleOpenModal = () => {

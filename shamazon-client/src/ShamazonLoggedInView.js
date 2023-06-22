@@ -4,7 +4,7 @@ import { LoggedInView } from "./components/views/LoggedInView"
 import { NavbarContainer } from "./components/nav/NavContainer"
 import { ShoppingCart } from "./components/cart/Cart"
 
-export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName, setUserInfo, userInfo, navigate}) => {
+export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName, setUserInfo, userInfo, navigate, userUpdate, setUserUpdate}) => {
     return (    
         <ShoppingCart userInfo={userInfo}>
             <Routes>
@@ -26,6 +26,8 @@ export const ShamazonLoggedInView = ({setLoggedInUser, loggedInUser, displayName
                                     loggedInUser={loggedInUser}
                                     setUserInfo={setUserInfo}
                                     userInfo={userInfo}
+                                    userUpdate={userUpdate}
+                                    setUserUpdate={setUserUpdate}
                                 />
                             </>
                         </Authorized>

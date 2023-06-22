@@ -6,7 +6,7 @@
 
         public decimal? OrderTotal { get; set; }
 
-        public OrderItem? OrderItem { get; set; }
+        public List<OrderItem> OrderItem { get; set; } = new();
 
         public string? OrderAddress { get; set; }
 

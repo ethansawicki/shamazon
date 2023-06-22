@@ -18,11 +18,12 @@ namespace Shamazon.Repositories.OrderRepositories
                         SELECT
 	                        OH.id as OrderHistoryId, OH.orderNumber, OH.userId,
 	                        O.id as OrderId, O.userId, O.orderTotal, O.orderAddress, O.dateCreated,
-	                        
-	                        OI.OrderId as OrderItemId, OI.ProductId, OI.ProductQuantity
+	                        P.id as ProductId, P.productDescription, P.productImg, P.productName, P.productCategoryId, P.productPrice,
+	                        OI.Id as OrderItemId, OI.ProductId, OI.ProductQuantity
                         FROM OrderHistory as OH
                         JOIN Orders as O ON O.id = OH.orderNumber
                         JOIN OrderItem as OI ON OI.OrderId = O.id
+						JOIN Products as P on OI.ProductId = P.id
                        
                         WHERE OH.userId = @userId";
 
@@ -36,8 +37,8 @@ namespace Shamazon.Repositories.OrderRepositories
                     {
                         var orderId = DbUtils.GetInt(reader, "OrderHistoryId");
                         var orderHistory = orderItems.FirstOrDefault(x => x.OrderId == orderId);
-
-                        if (orderHistory == null)
+                        var found = orderHistory != null;
+                        if (!found)
                         {
                             orderHistory = new OrderHistory()
                             {
@@ -45,29 +46,26 @@ namespace Shamazon.Repositories.OrderRepositories
                                 OrderTotal = DbUtils.GetDecimal(reader, "OrderTotal"),
                                 OrderAddress = DbUtils.GetString(reader, "OrderAddress"),
                                 OrderDate = DbUtils.GetDateTime(reader, "dateCreated"),
-                                OrderItem = new OrderItem()
-                                {
-                                    OrderItemId = DbUtils.GetInt(reader, "OrderItemId"),
-                                    OrderId = DbUtils.GetInt(reader, "OrderId"),
-                                    ProductQuantity = DbUtils.GetInt(reader, "ProductQuantity"),
-                                    Products = new List<OrderedProducts>()
-                                }   
                             };
-                            reader.Close();
-                            cmd.CommandText = @"SELECT P.id as ProductId, P.productDescription, P.productImg, P.productName, P.productCategoryId, P.productPrice FROM Products as P";
-                            reader = cmd.ExecuteReader();
-                            while (reader.Read())
+                        };   
+                            orderHistory.OrderItem.Add(new OrderItem()
                             {
-                                orderHistory.OrderItem.Products.Add(new OrderedProducts()
+                                OrderItemId = DbUtils.GetInt(reader, "OrderItemId"),
+                                OrderId = DbUtils.GetInt(reader, "OrderId"),
+                                ProductQuantity = DbUtils.GetInt(reader, "ProductQuantity"),
+                                Product = new OrderedProducts()
                                 {
                                     Id = DbUtils.GetInt(reader, "ProductId"),
                                     ProductName = DbUtils.GetString(reader, "ProductName"),
                                     ProductDescription = DbUtils.GetString(reader, "productDescription"),
                                     ProductImg = DbUtils.GetString(reader, "productImg"),
                                     ProductPrice = DbUtils.GetDecimal(reader, "productPrice"),
-                                });
-                            }
-                            
+                                }
+                            });
+
+
+                        if (!found)
+                        {
                             orderItems.Add(orderHistory);
                         }
                     }

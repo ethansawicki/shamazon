@@ -10,7 +10,7 @@ import { ShoppingCart } from "./components/cart/Cart";
 export const ShamazonUserCheck = ({app}) => {
   const [loggedInUser, setLoggedInUser] = useState(false)
   const [userInfo, setUserInfo] = useState()
-  const [cart, setCart] = useState([])
+  const [userUpdate, setUserUpdate] = useState(0)
   const auth = getAuth(app);
   const navigate = useNavigate();
 
@@ -32,11 +32,13 @@ export const ShamazonUserCheck = ({app}) => {
         navigate("/")
       }
     })
-  },[fetchUser, auth])
+  },[fetchUser, auth, userUpdate])
 
   if (loggedInUser === true) {
     return  <ShamazonLoggedInView
               auth={auth}
+              userUpdate={userUpdate}
+              setUserUpdate={setUserUpdate}
               userInfo={userInfo}
               setUserInfo={setUserInfo}
               loggedInUser={loggedInUser}

@@ -26,7 +26,7 @@ export const OrderHistory = ({ product }) => {
                         </Row>
                     </ListGroup.Item>
                         {
-                            product?.orderItem?.products?.map((products) => {
+                            product?.orderItem?.product?.map((products) => {
                                 return (
                                     <ListGroup.Item key={`product--${products.id}`}>
                                         <Row> 

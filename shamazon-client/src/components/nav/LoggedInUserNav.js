@@ -18,16 +18,16 @@ export const LoggedInUserNav = ({ setLoggedInUser, userInfo }) => {
         cart.order.orderTotal = total
         const orderItem = cart.items
         const id = await addNewOrder(cart.order, orderItem)
+        const orderHistory = {
+            orderNumber: id.id,
+            userId: userInfo.id
+        }
+        await addNewOrderHistory(orderHistory)
         for (const orders of cart.products) {
             orders.orderId = id.id
-            console.log(orders)
-            const orderHistory = {
-                orderNumber: orders.orderId,
-                userId: orders.userId
-            }
             await addNewOrderItem(orders)
-            await addNewOrderHistory(orderHistory)
         }
+        cart.removeAllFromCart()
     }
 
     
