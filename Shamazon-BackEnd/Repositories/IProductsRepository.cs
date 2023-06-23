@@ -6,5 +6,7 @@ namespace Shamazon.Repositories
     {
         List<Products> GetAllProducts();
         Products GetSpecificProduct(int id);
+
+        List<Products> SearchProducts(string searchTerm);
     }
 }

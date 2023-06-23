@@ -4,11 +4,11 @@ import { ProductsContainer } from "../products/ProductsContainer"
 import { VisitorHome } from "../home/VisitorHome"
 
 
-export const VisitorView = () => {
+export const VisitorView = ({loggedInUser}) => {
     return (
         <Routes>
             <Route path="/" element={<VisitorHome />} />
-            <Route path="search" element={<SearchComponent />} />
+            <Route path="search" element={<SearchComponent loggedInUser={loggedInUser} />} />
             <Route exact path="products" element={<ProductsContainer />} />
             <Route path="products/:productId" element={<ProductsContainer />} />
         </Routes>
