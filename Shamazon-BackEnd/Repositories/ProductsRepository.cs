@@ -101,5 +101,52 @@ namespace Shamazon.Repositories
                 }
             }
         }
+        public List<Products> SearchProducts(string searchTerm)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    var sql =
+                        @"SELECT 
+                            P.id as ProductId, 
+                            P.productName, 
+                            P.productPrice, 
+                            P.productQuantity, 
+                            P.productDescription, 
+                            P.productImg,
+                            PC.id ProductCategoryId,
+                            PC.categoryName
+                        FROM Products P
+                        JOIN productCategory as PC 
+                        ON P.productCategoryId = PC.id
+                        WHERE P.productName LIKE @searchTerm OR PC.categoryName LIKE @searchTerm";
+                    cmd.CommandText = sql;
+                    DbUtils.AddParameter(cmd, @"searchTerm", $"%{searchTerm}%");
+                    var reader = cmd.ExecuteReader();
+
+                    var products = new List<Products>();
+                    while (reader.Read())
+                    {
+                        products.Add(new Products()
+                        {
+                            Id = DbUtils.GetInt(reader, "ProductId"),
+                            ProductName = DbUtils.GetString(reader, "productName"),
+                            ProductPrice = DbUtils.GetDecimal(reader, "productPrice"),
+                            ProductDescription = DbUtils.GetString(reader, "productDescription"),
+                            ProductImg = DbUtils.GetString(reader, "productImg"),
+                            ProductsCategory = new ProductsCategory()
+                            {
+                                ProductCategoryId = DbUtils.GetInt(reader, "ProductCategoryId"),
+                                ProductCategoryName = DbUtils.GetString(reader, "categoryName")
+                            }
+                        });
+                    }
+                    reader.Close ();
+                    return products;
+                }
+            }
+        }
     }
 }
